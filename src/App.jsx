@@ -16,7 +16,9 @@ import {
   Menu,
   X,
   ShoppingBag,
-  Plus
+  Plus,
+  User,
+  LogOut
 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -66,6 +68,8 @@ function App() {
   const [bookingOpen, setBookingOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
+  const [loginOpen, setLoginOpen] = useState(false)
+  const [user, setUser] = useState(null)
   const [filter, setFilter] = useState('All')
   const [cart, setCart] = useState([])
   const mainRef = useRef(null)
@@ -251,6 +255,21 @@ function App() {
     setBookingOpen(false)
   }
 
+  const handleLogin = (e) => {
+    e.preventDefault()
+    // Simulate login - in production, this would call an API
+    const email = e.target.email.value
+    const name = email.split('@')[0]
+    setUser({ name, email })
+    toast.success(`Welcome back, ${name}!`)
+    setLoginOpen(false)
+  }
+
+  const handleLogout = () => {
+    setUser(null)
+    toast.success('Logged out successfully')
+  }
+
   const addToCart = (product) => {
     setCart(prev => {
       const existingItem = prev.find(item => item.id === product.id)
@@ -293,8 +312,8 @@ function App() {
   return (
     <div ref={mainRef} className="min-h-screen bg-[#F6F2EE]">
       {/* Navigation */}
-      <nav className="fixed top-0 left-0 right-0 z-50 px-6 py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md">
-        <div className="font-serif text-xl font-semibold text-[#2B1E1A]">Asha Boutique Store</div>
+      <nav className="fixed top-0 left-0 right-0 z-50 px-3 py-2 md:px-6 md:py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md w-full overflow-x-hidden">
+        <div className="font-serif text-sm md:text-xl font-semibold text-[#2B1E1A] truncate pr-2 min-w-0 flex-1">Asha Boutique Store</div>
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
@@ -302,9 +321,9 @@ function App() {
           <button onClick={() => scrollToSection(styleEditRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Lookbook</button>
           <button onClick={() => scrollToSection(atelierRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Atelier</button>
           <button onClick={() => scrollToSection(heroRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Visit</button>
-          
+
           {/* Cart Icon */}
-          <button 
+          <button
             onClick={() => setCartOpen(true)}
             className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
           >
@@ -315,8 +334,30 @@ function App() {
               </span>
             )}
           </button>
-          
-          <Button 
+
+          {/* User/Login */}
+          {user ? (
+            <div className="flex items-center gap-2">
+              <span className="text-sm text-[#2B1E1A]">Hi, {user.name}</span>
+              <button
+                onClick={handleLogout}
+                className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
+                title="Logout"
+              >
+                <LogOut size={20} />
+              </button>
+            </div>
+          ) : (
+            <button
+              onClick={() => setLoginOpen(true)}
+              className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
+              title="Login"
+            >
+              <User size={24} />
+            </button>
+          )}
+
+          <Button
             onClick={() => setBookingOpen(true)}
             className="bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full px-6"
           >
@@ -325,38 +366,79 @@ function App() {
         </div>
 
         {/* Mobile Menu Button */}
-        <div className="md:hidden flex items-center gap-4">
+        <div className="md:hidden flex items-center gap-2 flex-shrink-0">
           {/* Cart Icon Mobile */}
-          <button 
+          <button
             onClick={() => setCartOpen(true)}
-            className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
+            className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
           >
-            <ShoppingBag size={24} />
+            <ShoppingBag size={18} />
             {cart.length > 0 && (
-              <span className="absolute -top-2 -right-2 bg-[#E46A53] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
+              <span className="absolute -top-1 -right-1 bg-[#E46A53] text-white text-[10px] w-3.5 h-3.5 rounded-full flex items-center justify-center">
                 {cart.reduce((sum, item) => sum + item.quantity, 0)}
               </span>
             )}
           </button>
-          
-          <button 
-            className="text-[#2B1E1A]"
+
+          {/* User/Login Mobile */}
+          {user ? (
+            <button
+              onClick={handleLogout}
+              className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
+              title="Logout"
+            >
+              <LogOut size={18} />
+            </button>
+          ) : (
+            <button
+              onClick={() => setLoginOpen(true)}
+              className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
+              title="Login"
+            >
+              <User size={18} />
+            </button>
+          )}
+
+          <button
+            className="text-[#2B1E1A] flex-shrink-0"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
+            {mobileMenuOpen ? <X size={18} /> : <Menu size={18} />}
           </button>
         </div>
       </nav>
 
       {/* Mobile Menu */}
       {mobileMenuOpen && (
-        <div className="fixed inset-0 z-40 bg-[#F6F2EE] pt-20 px-6 md:hidden">
-          <div className="flex flex-col gap-6">
+        <div className="fixed inset-0 z-40 bg-[#F6F2EE] pt-16 px-6 md:hidden">
+          <div className="flex flex-col gap-4">
+            {user && (
+              <div className="flex items-center gap-3 pb-4 border-b border-[#E9E3DD]">
+                <div className="w-12 h-12 bg-[#E46A53] rounded-full flex items-center justify-center text-white font-semibold">
+                  {user.name.charAt(0).toUpperCase()}
+                </div>
+                <div>
+                  <p className="font-medium text-[#2B1E1A]">Hi, {user.name}</p>
+                  <p className="text-sm text-[#7A655D]">{user.email}</p>
+                </div>
+              </div>
+            )}
             <button onClick={() => scrollToSection(trendingRef)} className="text-lg text-[#2B1E1A]">Shop</button>
             <button onClick={() => scrollToSection(styleEditRef)} className="text-lg text-[#2B1E1A]">Lookbook</button>
             <button onClick={() => scrollToSection(atelierRef)} className="text-lg text-[#2B1E1A]">Atelier</button>
             <button onClick={() => scrollToSection(heroRef)} className="text-lg text-[#2B1E1A]">Visit</button>
-            <Button 
+            {user && (
+              <button
+                onClick={() => {
+                  handleLogout()
+                  setMobileMenuOpen(false)
+                }}
+                className="text-lg text-[#E46A53]"
+              >
+                Logout
+              </button>
+            )}
+            <Button
               onClick={() => {
                 setBookingOpen(true)
                 setMobileMenuOpen(false)
@@ -934,6 +1016,66 @@ function App() {
             >
               Request Appointment
             </Button>
+          </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Login Dialog */}
+      <Dialog open={loginOpen} onOpenChange={setLoginOpen}>
+        <DialogContent className="sm:max-w-md bg-[#F6F2EE] border-none rounded-[22px]">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl text-[#2B1E1A]">Welcome Back</DialogTitle>
+            <DialogDescription className="text-[#7A655D]">
+              Sign in to access your account and view your orders.
+            </DialogDescription>
+          </DialogHeader>
+
+          <form onSubmit={handleLogin} className="space-y-4 mt-4">
+            <div className="space-y-2">
+              <Label htmlFor="email" className="text-[#2B1E1A]">Email</Label>
+              <Input
+                id="email"
+                type="email"
+                placeholder="your@email.com"
+                required
+                className="bg-white border-[#E9E3DD] rounded-xl"
+              />
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="password" className="text-[#2B1E1A]">Password</Label>
+              <Input
+                id="password"
+                type="password"
+                placeholder="••••••••"
+                required
+                className="bg-white border-[#E9E3DD] rounded-xl"
+              />
+            </div>
+
+            <div className="flex items-center justify-between text-sm">
+              <label className="flex items-center gap-2 text-[#7A655D]">
+                <input type="checkbox" className="rounded" />
+                Remember me
+              </label>
+              <button type="button" className="text-[#E46A53] hover:underline">
+                Forgot password?
+              </button>
+            </div>
+
+            <Button
+              type="submit"
+              className="w-full bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full py-6"
+            >
+              Sign In
+            </Button>
+
+            <div className="text-center text-sm text-[#7A655D]">
+              Don't have an account?{' '}
+              <button type="button" className="text-[#E46A53] hover:underline">
+                Sign up
+              </button>
+            </div>
           </form>
         </DialogContent>
       </Dialog>
