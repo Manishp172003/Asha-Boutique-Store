@@ -478,14 +478,14 @@ function App() {
             </div>
             
             {/* Featured Card */}
-            <div className="hero-card bg-white rounded-[22px] p-4 shadow-lg max-w-xs">
-              <img 
-                src="/images/hero_featured.jpg" 
-                alt="Featured" 
-                className="w-full h-32 object-cover rounded-[14px] mb-3"
+            <div className="hero-card bg-white rounded-[22px] p-3 md:p-4 shadow-lg max-w-xs">
+              <img
+                src="/images/hero_featured.jpg"
+                alt="Featured"
+                className="w-full h-24 md:h-32 object-cover rounded-[14px] mb-2 md:mb-3"
               />
-              <h3 className="font-serif text-lg font-semibold text-[#2B1E1A]">Featured: The Linen Set</h3>
-              <p className="text-sm text-[#7A655D]">Tailored in-house. Ready in 7 days.</p>
+              <h3 className="font-serif text-sm md:text-lg font-semibold text-[#2B1E1A]">Featured: The Linen Set</h3>
+              <p className="text-xs md:text-sm text-[#7A655D]">Tailored in-house. Ready in 7 days.</p>
             </div>
           </div>
 
@@ -500,15 +500,15 @@ function App() {
         </div>
 
         {/* Scroll Indicator */}
-        <div className="absolute bottom-8 left-6 flex items-center gap-2 text-[#7A655D] text-sm">
+        <div className="absolute bottom-6 left-4 md:bottom-8 md:left-6 flex items-center gap-2 text-[#7A655D] text-xs md:text-sm hidden md:flex">
           <span>Scroll</span>
-          <ChevronDown size={16} className="animate-bounce" />
+          <ChevronDown size={14} className="animate-bounce md:size-16" />
         </div>
 
         {/* Now Open Badge */}
-        <div className="absolute bottom-8 right-6 bg-white rounded-full px-4 py-2 shadow-md flex items-center gap-2">
+        <div className="absolute bottom-6 right-4 md:bottom-8 md:right-6 bg-white rounded-full px-3 py-1.5 md:px-4 md:py-2 shadow-md flex items-center gap-2">
           <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span>
-          <span className="text-sm text-[#2B1E1A]">Now open</span>
+          <span className="text-xs md:text-sm text-[#2B1E1A]">Now open</span>
         </div>
       </section>
 
@@ -516,39 +516,39 @@ function App() {
       <section ref={newArrivalsRef} className="min-h-screen relative overflow-hidden">
         <div className="grid md:grid-cols-2 h-screen">
           <div className="new-arrivals-left relative">
-            <img 
-              src="/images/new_arrivals_left.jpg" 
-              alt="New Arrivals" 
+            <img
+              src="/images/new_arrivals_left.jpg"
+              alt="New Arrivals"
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="new-arrivals-right relative">
-            <img 
-              src="/images/new_arrivals_right.jpg" 
-              alt="New Arrivals" 
+          <div className="new-arrivals-right relative hidden md:block">
+            <img
+              src="/images/new_arrivals_right.jpg"
+              alt="New Arrivals"
               className="w-full h-full object-cover"
             />
           </div>
         </div>
 
         {/* Center Badge */}
-        <div className="new-badge absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-32 h-32 lg:w-40 lg:h-40 bg-[#E46A53] rounded-full flex items-center justify-center">
-          <span className="text-white font-serif text-2xl lg:text-3xl font-semibold">NEW</span>
+        <div className="new-badge absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-24 h-24 md:w-32 md:h-32 lg:w-40 lg:h-40 bg-[#E46A53] rounded-full flex items-center justify-center z-10">
+          <span className="text-white font-serif text-xl md:text-2xl lg:text-3xl font-semibold">NEW</span>
         </div>
 
         {/* Content Overlay */}
-        <div className="absolute top-8 left-6 lg:top-16 lg:left-12">
-          <h2 className="font-serif text-4xl lg:text-6xl font-semibold text-white drop-shadow-lg">New Arrivals</h2>
+        <div className="absolute top-6 left-4 md:top-16 md:left-12 z-10">
+          <h2 className="font-serif text-3xl md:text-4xl lg:text-6xl font-semibold text-white drop-shadow-lg">New Arrivals</h2>
         </div>
-        <div className="absolute top-8 right-6 lg:top-16 lg:right-12 max-w-xs">
-          <p className="text-white text-sm lg:text-base drop-shadow-lg">
+        <div className="absolute top-24 left-4 md:top-16 md:right-12 md:left-auto md:max-w-xs z-10">
+          <p className="text-white text-xs md:text-sm lg:text-base drop-shadow-lg">
             Fresh silhouettes, soft fabrics, and details that feel handmade—because they are.
           </p>
         </div>
-        <div className="absolute bottom-8 left-6 lg:bottom-16 lg:left-12">
-          <Button 
+        <div className="absolute bottom-6 left-4 md:bottom-16 md:left-12 z-10">
+          <Button
             onClick={() => scrollToSection(trendingRef)}
-            className="bg-white text-[#2B1E1A] hover:bg-[#F6F2EE] rounded-full px-6"
+            className="bg-white text-[#2B1E1A] hover:bg-[#F6F2EE] rounded-full px-4 md:px-6 text-sm"
           >
             Shop New In
           </Button>
