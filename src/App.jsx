@@ -451,7 +451,7 @@ function App() {
 
       {/* Section 2: New Arrivals */}
       <section ref={newArrivalsRef} className="min-h-screen relative overflow-hidden">
-        <div className="grid md:grid-cols-2 h-screen">
+        <div className="grid grid-cols-2 md:grid-cols-2 h-screen">
           <div className="new-arrivals-left relative">
             <img
               src="/images/new_arrivals_left.jpg"
@@ -459,7 +459,7 @@ function App() {
               className="w-full h-full object-cover"
             />
           </div>
-          <div className="new-arrivals-right relative hidden md:block">
+          <div className="new-arrivals-right relative">
             <img
               src="/images/new_arrivals_right.jpg"
               alt="New Arrivals"
@@ -602,7 +602,7 @@ function App() {
           </div>
 
           {/* Product Grid */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6">
             {filteredProducts.map((product) => (
               <div 
                 key={product.id} 
