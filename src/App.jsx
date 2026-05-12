@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import { animateHeroSection, initializeScrollAnimations, cleanupAnimations } from './animations/gsapAnimations'
 import { 
   ChevronDown, 
   MapPin, 
@@ -18,7 +17,12 @@ import {
   ShoppingBag,
   Plus,
   User,
-  LogOut
+  LogOut,
+  Package,
+  CreditCard,
+  Truck,
+  CheckCircle,
+  Clock as Timer
 } from 'lucide-react'
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
@@ -28,8 +32,6 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { toast } from 'sonner'
 import './App.css'
-
-gsap.registerPlugin(ScrollTrigger)
 
 // Product data
 const products = [
@@ -69,9 +71,23 @@ function App() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
   const [loginOpen, setLoginOpen] = useState(false)
+  const [checkoutOpen, setCheckoutOpen] = useState(false)
+  const [orderHistoryOpen, setOrderHistoryOpen] = useState(false)
   const [user, setUser] = useState(null)
   const [filter, setFilter] = useState('All')
   const [cart, setCart] = useState([])
+  const [orders, setOrders] = useState([])
+  const [currentOrder, setCurrentOrder] = useState(null)
+  const [shippingInfo, setShippingInfo] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    address: '',
+    city: '',
+    state: '',
+    pincode: ''
+  })
+  const [paymentMethod, setPaymentMethod] = useState('cod')
   const mainRef = useRef(null)
   const heroRef = useRef(null)
   const newArrivalsRef = useRef(null)
@@ -82,169 +98,20 @@ function App() {
 
   // Hero load animation
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // Hero entrance animation
-      gsap.fromTo('.hero-image', 
-        { opacity: 0, scale: 1.06 },
-        { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }
-      )
-      gsap.fromTo('.hero-headline', 
-        { opacity: 0, y: 26 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power2.out' }
-      )
-      gsap.fromTo('.hero-subheadline', 
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power2.out' }
-      )
-      gsap.fromTo('.hero-cta', 
-        { opacity: 0, y: 18 },
-        { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: 'power2.out' }
-      )
-      gsap.fromTo('.hero-card', 
-        { opacity: 0, y: 24, scale: 0.98 },
-        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 0.6, ease: 'power2.out' }
-      )
-    }, heroRef)
-
+    const ctx = animateHeroSection(heroRef)
     return () => ctx.revert()
   }, [])
 
   // Scroll animations
   useEffect(() => {
-    const ctx = gsap.context(() => {
-      // New Arrivals section
-      gsap.fromTo('.new-arrivals-left',
-        { x: '-60vw' },
-        {
-          x: 0,
-          scrollTrigger: {
-            trigger: newArrivalsRef.current,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 1
-          }
-        }
-      )
-      gsap.fromTo('.new-arrivals-right',
-        { x: '60vw' },
-        {
-          x: 0,
-          scrollTrigger: {
-            trigger: newArrivalsRef.current,
-            start: 'top 80%',
-            end: 'top 20%',
-            scrub: 1
-          }
-        }
-      )
-      gsap.fromTo('.new-badge',
-        { scale: 0.2, rotate: -12, opacity: 0 },
-        {
-          scale: 1, rotate: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: newArrivalsRef.current,
-            start: 'top 70%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-
-      // Curated Collection section
-      gsap.fromTo('.curated-image',
-        { x: '60vw', opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: curatedRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-      gsap.fromTo('.curated-text',
-        { x: '-40vw', opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: curatedRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-
-      // Atelier section
-      gsap.fromTo('.atelier-image',
-        { x: '-70vw' },
-        {
-          x: 0,
-          scrollTrigger: {
-            trigger: atelierRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-      gsap.fromTo('.atelier-text',
-        { x: '50vw', opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: atelierRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-
-      // Trending section
-      gsap.fromTo('.trending-card',
-        { y: 40, opacity: 0, scale: 0.98 },
-        {
-          y: 0, opacity: 1, scale: 1,
-          stagger: 0.08,
-          scrollTrigger: {
-            trigger: trendingRef.current,
-            start: 'top 80%',
-            end: 'top 40%',
-            scrub: 1
-          }
-        }
-      )
-
-      // Style Edit section
-      gsap.fromTo('.style-image',
-        { x: '60vw', opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: styleEditRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-      gsap.fromTo('.style-text',
-        { x: '-40vw', opacity: 0 },
-        {
-          x: 0, opacity: 1,
-          scrollTrigger: {
-            trigger: styleEditRef.current,
-            start: 'top 80%',
-            end: 'top 30%',
-            scrub: 1
-          }
-        }
-      )
-    }, mainRef)
-
-    return () => ctx.revert()
+    const contexts = initializeScrollAnimations({
+      newArrivalsRef,
+      curatedRef,
+      atelierRef,
+      trendingRef,
+      styleEditRef
+    })
+    return () => cleanupAnimations(contexts)
   }, [])
 
   const filteredProducts = filter === 'All' ? products : products.filter(p => p.category === filter)
@@ -268,6 +135,69 @@ function App() {
   const handleLogout = () => {
     setUser(null)
     toast.success('Logged out successfully')
+  }
+
+  // Enhanced order management functions
+  const generateOrderId = () => {
+    return 'ORD' + Date.now().toString().slice(-6)
+  }
+
+  const placeOrder = () => {
+    if (!user) {
+      toast.error('Please login to place an order')
+      setLoginOpen(true)
+      return
+    }
+
+    if (!shippingInfo.name || !shippingInfo.email || !shippingInfo.phone || !shippingInfo.address) {
+      toast.error('Please fill all shipping information')
+      return
+    }
+
+    const order = {
+      id: generateOrderId(),
+      userId: user.email,
+      items: [...cart],
+      total: cartTotal,
+      shippingInfo: { ...shippingInfo },
+      paymentMethod,
+      status: 'confirmed',
+      createdAt: new Date().toISOString(),
+      estimatedDelivery: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
+      tracking: [
+        { status: 'confirmed', message: 'Order confirmed', timestamp: new Date().toISOString() },
+        { status: 'processing', message: 'Processing your order', timestamp: null },
+        { status: 'shipped', message: 'Order shipped', timestamp: null },
+        { status: 'delivered', message: 'Delivered successfully', timestamp: null }
+      ]
+    }
+
+    setOrders(prev => [order, ...prev])
+    setCurrentOrder(order)
+    setCart([])
+    setCheckoutOpen(false)
+    setCartOpen(false)
+    toast.success(`Order ${order.id} placed successfully!`)
+  }
+
+  const updateOrderStatus = (orderId, newStatus) => {
+    setOrders(prev => prev.map(order => {
+      if (order.id === orderId) {
+        const updatedTracking = order.tracking.map(step => {
+          if (step.status === newStatus && !step.timestamp) {
+            return { ...step, timestamp: new Date().toISOString() }
+          }
+          return step
+        })
+        return { ...order, status: newStatus, tracking: updatedTracking }
+      }
+      return order
+    }))
+  }
+
+  const getUserOrders = () => {
+    if (!user) return []
+    return orders.filter(order => order.userId === user.email)
   }
 
   const addToCart = (product) => {
@@ -339,6 +269,13 @@ function App() {
           {user ? (
             <div className="flex items-center gap-2">
               <span className="text-sm text-[#2B1E1A]">Hi, {user.name}</span>
+              <button
+                onClick={() => setOrderHistoryOpen(true)}
+                className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
+                title="My Orders"
+              >
+                <Package size={20} />
+              </button>
               <button
                 onClick={handleLogout}
                 className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
@@ -1150,7 +1087,7 @@ function App() {
                 </div>
                 <Button 
                   onClick={() => {
-                    toast.success('Checkout functionality coming soon!')
+                    setCheckoutOpen(true)
                     setCartOpen(false)
                   }}
                   className="w-full bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full py-6"
@@ -1160,6 +1097,250 @@ function App() {
               </div>
             </div>
           )}
+        </DialogContent>
+      </Dialog>
+
+      {/* Checkout Dialog */}
+      <Dialog open={checkoutOpen} onOpenChange={setCheckoutOpen}>
+        <DialogContent className="sm:max-w-2xl bg-[#F6F2EE] border-none rounded-[22px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl text-[#2B1E1A]">Checkout</DialogTitle>
+            <DialogDescription className="text-[#7A655D]">
+              Complete your order details
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6 space-y-6">
+            {/* Order Summary */}
+            <div className="bg-white rounded-xl p-4">
+              <h3 className="font-serif text-lg text-[#2B1E1A] mb-3">Order Summary</h3>
+              <div className="space-y-2">
+                {cart.map((item) => (
+                  <div key={item.id} className="flex justify-between text-sm">
+                    <span className="text-[#7A655D]">{item.name} x{item.quantity}</span>
+                    <span className="text-[#2B1E1A]">₹{(parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity).toLocaleString()}</span>
+                  </div>
+                ))}
+                <div className="border-t border-[#E9E3DD] pt-2 mt-2">
+                  <div className="flex justify-between font-semibold">
+                    <span className="text-[#2B1E1A]">Total</span>
+                    <span className="text-[#2B1E1A] text-lg">₹{cartTotal.toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Shipping Information */}
+            <div className="bg-white rounded-xl p-4">
+              <h3 className="font-serif text-lg text-[#2B1E1A] mb-3">Shipping Information</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <Label htmlFor="name" className="text-[#2B1E1A]">Full Name</Label>
+                  <Input
+                    id="name"
+                    value={shippingInfo.name}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, name: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="John Doe"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="email" className="text-[#2B1E1A]">Email</Label>
+                  <Input
+                    id="email"
+                    type="email"
+                    value={shippingInfo.email}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, email: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="john@example.com"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="phone" className="text-[#2B1E1A]">Phone</Label>
+                  <Input
+                    id="phone"
+                    value={shippingInfo.phone}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, phone: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="+91 98765 43210"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="pincode" className="text-[#2B1E1A]">Pincode</Label>
+                  <Input
+                    id="pincode"
+                    value={shippingInfo.pincode}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, pincode: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="400001"
+                  />
+                </div>
+                <div className="md:col-span-2">
+                  <Label htmlFor="address" className="text-[#2B1E1A]">Address</Label>
+                  <Textarea
+                    id="address"
+                    value={shippingInfo.address}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, address: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="123, Main Street, Area Name"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="city" className="text-[#2B1E1A]">City</Label>
+                  <Input
+                    id="city"
+                    value={shippingInfo.city}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, city: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="Mumbai"
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="state" className="text-[#2B1E1A]">State</Label>
+                  <Input
+                    id="state"
+                    value={shippingInfo.state}
+                    onChange={(e) => setShippingInfo(prev => ({ ...prev, state: e.target.value }))}
+                    className="bg-white border-[#E9E3DD] rounded-xl"
+                    placeholder="Maharashtra"
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Payment Method */}
+            <div className="bg-white rounded-xl p-4">
+              <h3 className="font-serif text-lg text-[#2B1E1A] mb-3">Payment Method</h3>
+              <div className="space-y-3">
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="cod"
+                    checked={paymentMethod === 'cod'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="text-[#E46A53]"
+                  />
+                  <div className="flex items-center gap-2">
+                    <Truck size={20} className="text-[#E46A53]" />
+                    <span className="text-[#2B1E1A]">Cash on Delivery</span>
+                  </div>
+                </label>
+                <label className="flex items-center gap-3 cursor-pointer">
+                  <input
+                    type="radio"
+                    name="payment"
+                    value="card"
+                    checked={paymentMethod === 'card'}
+                    onChange={(e) => setPaymentMethod(e.target.value)}
+                    className="text-[#E46A53]"
+                  />
+                  <div className="flex items-center gap-2">
+                    <CreditCard size={20} className="text-[#E46A53]" />
+                    <span className="text-[#2B1E1A]">Credit/Debit Card</span>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            {/* Place Order Button */}
+            <Button
+              onClick={placeOrder}
+              className="w-full bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full py-6"
+            >
+              Place Order • ₹{cartTotal.toLocaleString()}
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Order History Dialog */}
+      <Dialog open={orderHistoryOpen} onOpenChange={setOrderHistoryOpen}>
+        <DialogContent className="sm:max-w-3xl bg-[#F6F2EE] border-none rounded-[22px] max-h-[90vh] overflow-y-auto">
+          <DialogHeader>
+            <DialogTitle className="font-serif text-2xl text-[#2B1E1A]">My Orders</DialogTitle>
+            <DialogDescription className="text-[#7A655D]">
+              Track your order history
+            </DialogDescription>
+          </DialogHeader>
+
+          <div className="mt-6">
+            {getUserOrders().length === 0 ? (
+              <div className="py-12 text-center">
+                <Package className="mx-auto text-[#7A655D] mb-4" size={48} />
+                <p className="text-[#7A655D]">No orders yet</p>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                {getUserOrders().map((order) => (
+                  <div key={order.id} className="bg-white rounded-xl p-4">
+                    <div className="flex justify-between items-start mb-3">
+                      <div>
+                        <h4 className="font-semibold text-[#2B1E1A]">Order #{order.id}</h4>
+                        <p className="text-sm text-[#7A655D]">
+                          {new Date(order.createdAt).toLocaleDateString()}
+                        </p>
+                      </div>
+                      <div className="text-right">
+                        <span className="text-lg font-semibold text-[#2B1E1A]">
+                          ₹{order.total.toLocaleString()}
+                        </span>
+                        <div className="flex items-center gap-1 text-sm text-[#E46A53]">
+                          {order.status === 'confirmed' && <CheckCircle size={14} />}
+                          {order.status === 'processing' && <Timer size={14} />}
+                          {order.status === 'shipped' && <Truck size={14} />}
+                          {order.status === 'delivered' && <CheckCircle size={14} />}
+                          {order.status.charAt(0).toUpperCase() + order.status.slice(1)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Order Items */}
+                    <div className="mb-3">
+                      <div className="text-sm text-[#7A655D] mb-2">Items:</div>
+                      <div className="space-y-1">
+                        {order.items.map((item) => (
+                          <div key={item.id} className="flex justify-between text-sm">
+                            <span className="text-[#7A655D]">{item.name} x{item.quantity}</span>
+                            <span className="text-[#2B1E1A]">₹{(parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity).toLocaleString()}</span>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Order Tracking */}
+                    <div className="border-t border-[#E9E3DD] pt-3">
+                      <div className="text-sm text-[#7A655D] mb-2">Tracking:</div>
+                      <div className="space-y-2">
+                        {order.tracking.map((step, index) => (
+                          <div key={step.status} className="flex items-center gap-3">
+                            <div className={`w-4 h-4 rounded-full flex items-center justify-center ${
+                              step.timestamp ? 'bg-[#E46A53]' : 'bg-[#E9E3DD]'
+                            }`}>
+                              {step.timestamp && <CheckCircle size={12} className="text-white" />}
+                            </div>
+                            <div className="flex-1">
+                              <div className="text-sm text-[#2B1E1A]">{step.message}</div>
+                              {step.timestamp && (
+                                <div className="text-xs text-[#7A655D]">
+                                  {new Date(step.timestamp).toLocaleString()}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Estimated Delivery */}
+                    <div className="mt-3 text-sm text-[#7A655D]">
+                      Estimated Delivery: {new Date(order.estimatedDelivery).toLocaleDateString()}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
         </DialogContent>
       </Dialog>
     </div>
