@@ -15,7 +15,7 @@ import {
   Menu,
   X,
   ShoppingBag,
-  Plus,
+  Eye,
   User,
   LogOut,
   Package,
@@ -45,6 +45,22 @@ const products = [
   { id: 8, name: 'Block-Print Dupatta', price: '₹1,500', image: '/images/product8.jpg', category: 'Accessories' },
 ]
 
+const productDetails = {
+  1: { description: 'A refined blouse with soft pleat detailing, tailored for easy movement and a polished everyday shape.', fabric: 'Cotton-silk blend', fit: 'Relaxed shoulder with a neat waist', care: 'Gentle hand wash or dry clean', delivery: 'Ready to ship in 2-3 days', stock: 20 },
+  2: { description: 'A graceful midi dress with tiered movement, finished with a flattering neckline and fluid drape.', fabric: 'Soft rayon voile', fit: 'Easy fit with a defined waist', care: 'Cold wash separately', delivery: 'Ready to ship in 3-4 days', stock: 16 },
+  3: { description: 'Structured trousers finished for everyday comfort, with a clean front and ankle-skimming length.', fabric: 'Cotton twill', fit: 'High-rise straight fit', care: 'Machine wash mild', delivery: 'Ready to ship in 4-5 days', stock: 18 },
+  4: { description: 'A light cropped jacket in breathable linen, ideal for layering over dresses, kurtas, and camisoles.', fabric: 'Washed linen', fit: 'Boxy cropped fit', care: 'Dry clean recommended', delivery: 'Ready to ship in 3-4 days', stock: 14 },
+  5: { description: 'A handloom kurta set with boutique finishing, balanced for festive days and relaxed evenings.', fabric: 'Handloom cotton', fit: 'Straight kurta with easy trousers', care: 'Hand wash in cold water', delivery: 'Ready to ship in 5-7 days', stock: 12 },
+  6: { description: 'A soft silk scarf for effortless layering, adding a quiet accent to workwear and occasion looks.', fabric: 'Silk blend', fit: 'One size', care: 'Dry clean only', delivery: 'Ready to ship in 1-2 days', stock: 25 },
+  7: { description: 'A carry-all tote with embroidered detailing, sized for daily errands, books, and boutique finds.', fabric: 'Canvas with thread embroidery', fit: 'Spacious interior pocket', care: 'Spot clean gently', delivery: 'Ready to ship in 2-3 days', stock: 22 },
+  8: { description: 'A block-print dupatta with a light drape, made to pair with classic kurtas and simple dresses.', fabric: 'Mul cotton', fit: 'Full-length drape', care: 'Cold wash separately', delivery: 'Ready to ship in 2-3 days', stock: 24 },
+}
+
+const productCatalog = products.map((product) => ({
+  ...product,
+  ...productDetails[product.id],
+}))
+
 const testimonials = [
   {
     id: 1,
@@ -70,6 +86,7 @@ function App() {
   const [bookingOpen, setBookingOpen] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
   const [cartOpen, setCartOpen] = useState(false)
+  const [productPreview, setProductPreview] = useState(null)
   const [loginOpen, setLoginOpen] = useState(false)
   const [checkoutOpen, setCheckoutOpen] = useState(false)
   const [orderHistoryOpen, setOrderHistoryOpen] = useState(false)
@@ -114,7 +131,7 @@ function App() {
     return () => cleanupAnimations(contexts)
   }, [])
 
-  const filteredProducts = filter === 'All' ? products : products.filter(p => p.category === filter)
+  const filteredProducts = filter === 'All' ? productCatalog : productCatalog.filter(p => p.category === filter)
 
   const handleBookingSubmit = (e) => {
     e.preventDefault()
@@ -215,6 +232,12 @@ function App() {
     toast.success(`${product.name} added to cart`)
   }
 
+  const buyNow = (product) => {
+    setCart([{ ...product, quantity: 1 }])
+    setProductPreview(null)
+    setCheckoutOpen(true)
+  }
+
   const removeFromCart = (productId) => {
     setCart(prev => prev.filter(item => item.id !== productId))
   }
@@ -240,7 +263,7 @@ function App() {
   }
 
   return (
-    <div ref={mainRef} className="min-h-screen bg-[#F6F2EE]">
+    <div ref={mainRef} className="min-h-screen bg-[#F6F2EE] overflow-x-hidden">
       {/* Navigation */}
       <nav className="fixed top-0 left-0 right-0 z-50 px-3 py-2 md:px-6 md:py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md w-full overflow-x-hidden">
         <div className="font-serif text-sm md:text-xl font-semibold text-[#2B1E1A] truncate pr-2 min-w-0 flex-1">Asha Boutique Store</div>
@@ -606,7 +629,8 @@ function App() {
             {filteredProducts.map((product) => (
               <div 
                 key={product.id} 
-                className="trending-card group"
+                className="trending-card group cursor-pointer"
+                onClick={() => setProductPreview(product)}
               >
                 <div className="relative aspect-[3/4] rounded-[22px] overflow-hidden mb-4 bg-[#E9E3DD]">
                   <img 
@@ -615,10 +639,14 @@ function App() {
                     className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
                   />
                   <Button
-                    onClick={() => addToCart(product)}
+                    onClick={(event) => {
+                      event.stopPropagation()
+                      setProductPreview(product)
+                    }}
+                    aria-label={`Preview ${product.name}`}
                     className="absolute bottom-4 right-4 bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full p-3 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
                   >
-                    <Plus size={20} />
+                    <Eye size={20} />
                   </Button>
                 </div>
                 <h3 className="font-medium text-[#2B1E1A] mb-1">{product.name}</h3>
@@ -1014,6 +1042,85 @@ function App() {
               </button>
             </div>
           </form>
+        </DialogContent>
+      </Dialog>
+
+      {/* Product Preview Dialog */}
+      <Dialog open={!!productPreview} onOpenChange={(open) => !open && setProductPreview(null)}>
+        <DialogContent className="sm:max-w-4xl bg-[#F6F2EE] border-none rounded-[22px] max-h-[92vh] overflow-y-auto p-4 md:p-6">
+          {productPreview && (
+            <div className="grid gap-6 md:grid-cols-[0.95fr_1.05fr]">
+              <div className="overflow-hidden rounded-[18px] bg-[#E9E3DD]">
+                <img
+                  src={productPreview.image}
+                  alt={productPreview.name}
+                  className="h-[360px] w-full object-cover md:h-full md:min-h-[520px]"
+                />
+              </div>
+
+              <div className="flex flex-col">
+                <DialogHeader className="pr-8">
+                  <div className="mb-2 text-xs font-medium uppercase tracking-[0.18em] text-[#E46A53]">
+                    {productPreview.category}
+                  </div>
+                  <DialogTitle className="font-serif text-3xl md:text-4xl leading-tight text-[#2B1E1A]">
+                    {productPreview.name}
+                  </DialogTitle>
+                  <DialogDescription className="text-base leading-7 text-[#7A655D]">
+                    {productPreview.description}
+                  </DialogDescription>
+                </DialogHeader>
+
+                <div className="mt-5 flex items-center justify-between border-y border-[#E9E3DD] py-4">
+                  <span className="text-2xl font-semibold text-[#2B1E1A]">{productPreview.price}</span>
+                  <span className="rounded-full bg-white px-4 py-2 text-sm text-[#2B1E1A]">
+                    {productPreview.stock} in stock
+                  </span>
+                </div>
+
+                <div className="mt-5 grid gap-3 sm:grid-cols-2">
+                  {[
+                    ['Fabric', productPreview.fabric],
+                    ['Fit', productPreview.fit],
+                    ['Care', productPreview.care],
+                    ['Delivery', productPreview.delivery],
+                  ].map(([label, value]) => (
+                    <div key={label} className="rounded-xl bg-white p-4">
+                      <div className="text-xs font-medium uppercase tracking-[0.14em] text-[#A08B82]">{label}</div>
+                      <div className="mt-2 text-sm leading-6 text-[#2B1E1A]">{value}</div>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="mt-6 rounded-xl bg-white p-4">
+                  <h4 className="font-serif text-lg text-[#2B1E1A]">Boutique note</h4>
+                  <p className="mt-2 text-sm leading-6 text-[#7A655D]">
+                    Need a small adjustment? Book a fitting after checkout and our atelier can help with length, waist, or sleeve refinements.
+                  </p>
+                </div>
+
+                <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+                  <Button
+                    onClick={() => {
+                      addToCart(productPreview)
+                      setProductPreview(null)
+                      setCartOpen(true)
+                    }}
+                    className="flex-1 bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full py-6"
+                  >
+                    <ShoppingBag className="mr-2" size={18} />
+                    Add to Cart
+                  </Button>
+                  <Button
+                    onClick={() => buyNow(productPreview)}
+                    className="flex-1 bg-[#2B1E1A] hover:bg-[#3a2923] text-white rounded-full py-6"
+                  >
+                    Buy Now
+                  </Button>
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
 
