@@ -238,5 +238,13 @@ export const initializeScrollAnimations = (refs) => {
 
 // Cleanup function for all animations
 export const cleanupAnimations = (contexts) => {
-  contexts.forEach(ctx => ctx.revert())
+  if (!contexts) return;
+
+  const list = Array.isArray(contexts) ? contexts : [contexts];
+
+  list.forEach(ctx => {
+    if (ctx && typeof ctx.revert === 'function') {
+      ctx.revert();
+    }
+  });
 }
