@@ -5,7 +5,7 @@ import { useApp } from "../../../../context/AppContext";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
-  const { addToCart } = useApp();
+  const { addToCart, addToWishlist, removeFromWishlist, isWishlisted } = useApp();
 
   const handleCardClick = () => {
     navigate(`/product/${product.id}`);
@@ -16,6 +16,17 @@ const ProductCard = ({ product }) => {
     addToCart(product);
     navigate('/cart');
   };
+
+  const handleWishlistToggle = (e) => {
+    e.stopPropagation();
+    if (isWishlisted(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const wishlisted = isWishlisted(product.id);
 
   return (
     <div className="product-card" onClick={handleCardClick}>
@@ -36,11 +47,15 @@ const ProductCard = ({ product }) => {
           <span className="badge sale">SALE</span>
         )}
 
-        <button 
+        <button
           className="wishlist-btn"
-          onClick={(e) => e.stopPropagation()}
+          onClick={handleWishlistToggle}
         >
-          <Heart size={18} />
+          <Heart
+            size={18}
+            fill={wishlisted ? "#D57B5A" : "none"}
+            color={wishlisted ? "#D57B5A" : "currentColor"}
+          />
         </button>
 
         <div className="product-overlay" onClick={(e) => e.stopPropagation()}>

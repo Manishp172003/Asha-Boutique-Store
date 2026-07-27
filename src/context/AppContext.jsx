@@ -72,6 +72,9 @@ export const AppProvider = ({ children }) => {
   const [cart, setCart] = useState([])
   const [filter, setFilter] = useState('All')
 
+  // Wishlist State
+  const [wishlist, setWishlist] = useState([])
+
   // Orders State
   const [orders, setOrders] = useState([])
   const [currentOrder, setCurrentOrder] = useState(null)
@@ -117,6 +120,27 @@ export const AppProvider = ({ children }) => {
       }
       return item
     }))
+  }
+
+  // Wishlist functions
+  const addToWishlist = (product) => {
+    setWishlist(prev => {
+      const existingItem = prev.find(item => item.id === product.id)
+      if (existingItem) {
+        return prev
+      }
+      return [...prev, { ...product }]
+    })
+    toast.success(`${product.name} added to wishlist`)
+  }
+
+  const removeFromWishlist = (productId) => {
+    setWishlist(prev => prev.filter(item => item.id !== productId))
+    toast.success('Item removed from wishlist')
+  }
+
+  const isWishlisted = (productId) => {
+    return wishlist.some(item => item.id === productId)
   }
 
   const buyNow = (product) => {
@@ -261,7 +285,10 @@ export const AppProvider = ({ children }) => {
     // Cart State
     cart,
     filter,
-    
+
+    // Wishlist State
+    wishlist,
+
     // Orders State
     orders,
     currentOrder,
@@ -281,6 +308,9 @@ export const AppProvider = ({ children }) => {
     removeFromCart,
     updateQuantity,
     buyNow,
+    addToWishlist,
+    removeFromWishlist,
+    isWishlisted,
     placeOrder,
     getUserOrders,
     updateOrderStatus,

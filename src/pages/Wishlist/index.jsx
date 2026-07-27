@@ -1,12 +1,47 @@
-const Wishlist = () => {
-  return (
-    <div className="min-h-screen bg-[#F6F2EE] flex items-center justify-center px-6">
-      <div className="text-center">
-        <h1 className="font-serif text-3xl text-[#2B1E1A] mb-4">Wishlist Page</h1>
-        <p className="text-[#7A655D]">This page will be designed and implemented later.</p>
-      </div>
-    </div>
-  )
-}
+import "./Wishlist.css";
+import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
+import { useApp } from "../../context/AppContext";
 
-export default Wishlist
+import WishlistHeader from "./components/WishlistHeader/WishlistHeader";
+import WishlistGrid from "./components/WishlistGrid/WishlistGrid";
+import EditorialSection from "./components/EditorialSection/EditorialSection";
+
+import Newsletter from "../Shop/components/Newsletter/Newsletter";
+
+const Wishlist = () => {
+  const { wishlist } = useApp();
+  const navigate = useNavigate();
+
+  const isEmpty = wishlist.length === 0;
+
+  return (
+    <div className="wishlist-page">
+
+      <WishlistHeader count={wishlist.length} />
+
+      {isEmpty ? (
+        <div className="wishlist-empty-state">
+          <div className="empty-heart">
+            <Heart size={64} color="#D57B5A" />
+          </div>
+          <h2>Your Wishlist is Empty</h2>
+          <p>Looks like you haven't saved any beautiful pieces yet.</p>
+          <button className="continue-shopping-btn" onClick={() => navigate('/shop')}>
+            Continue Shopping
+          </button>
+        </div>
+      ) : (
+        <>
+          <WishlistGrid />
+          <EditorialSection />
+        </>
+      )}
+
+      <Newsletter />
+
+    </div>
+  );
+};
+
+export default Wishlist;

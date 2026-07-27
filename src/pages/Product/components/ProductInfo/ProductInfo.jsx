@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
 import { useApp } from "../../../../context/AppContext";
 import "./ProductInfo.css";
 
@@ -14,7 +15,7 @@ const sizes = ["XS", "S", "M", "L", "XL"];
 
 const ProductInfo = ({ product }) => {
   const navigate = useNavigate();
-  const { addToCart } = useApp();
+  const { addToCart, addToWishlist, removeFromWishlist, isWishlisted } = useApp();
 
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [selectedSize, setSelectedSize] = useState("S");
@@ -28,6 +29,16 @@ const ProductInfo = ({ product }) => {
     addToCart(product);
     navigate('/checkout');
   };
+
+  const handleWishlistToggle = () => {
+    if (isWishlisted(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const wishlisted = isWishlisted(product.id);
 
   const formattedPrice = `₹${product.price.toLocaleString('en-IN')}`;
 
@@ -47,6 +58,18 @@ const ProductInfo = ({ product }) => {
       </div>
 
       <h2 className="product-price">{formattedPrice}</h2>
+
+      <button
+        className="wishlist-toggle-btn"
+        onClick={handleWishlistToggle}
+      >
+        <Heart
+          size={20}
+          fill={wishlisted ? "#D57B5A" : "none"}
+          color={wishlisted ? "#D57B5A" : "currentColor"}
+        />
+        {wishlisted ? 'Saved to Wishlist' : 'Add to Wishlist'}
+      </button>
 
       <p className="product-description">
         Handcrafted from the finest materials,

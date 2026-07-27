@@ -304,3 +304,33 @@
     font-size:26px;
 }
 }
+
+.wishlist-toggle-btn{
+    display:flex;
+    align-items:center;
+    gap:10px;
+
+    padding:12px 20px;
+
+    background:#F8F4F0;
+
+    border:1px solid #E7D9D1;
+
+    border-radius:8px;
+
+    font-size:14px;
+    font-weight:500;
+    color:#5B4A42;
+
+    cursor:pointer;
+
+    transition:all 0.3s ease;
+
+    margin-bottom:24px;
+}
+
+.wishlist-toggle-btn:hover{
+    background:#F0EBE5;
+    border-color:#D5C5BB;
+}
+
