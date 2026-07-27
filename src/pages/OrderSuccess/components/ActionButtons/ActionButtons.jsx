@@ -6,12 +6,10 @@ const ActionButtons = () => {
   const navigate = useNavigate();
 
   const handleContinueShopping = () => {
-    window.scrollTo(0, 0);
     navigate("/shop");
   };
 
   const handleManageOrder = () => {
-    window.scrollTo(0, 0);
     navigate("/orders");
   };
 

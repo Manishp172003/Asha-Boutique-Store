@@ -80,7 +80,7 @@ const ProductCard = ({ product }) => {
           {product.category}
         </span>
 
-        <h3>{product.name}</h3>
+        <h3 className="product-name">{product.name}</h3>
 
         <div className="rating">
 

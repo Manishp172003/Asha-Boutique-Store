@@ -1,5 +1,5 @@
 import { useRef, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { animateHeroSection, initializeScrollAnimations, cleanupAnimations } from '../../animations/gsapAnimations'
 import { toast } from 'sonner'
 import { useApp } from '../../context/AppContext'
@@ -27,6 +27,7 @@ import OrderHistoryDialog from '../../components/cart/OrderHistoryDialog'
 
 const Home = () => {
   const navigate = useNavigate()
+  const location = useLocation()
   const {
     user,
     cart,
@@ -83,6 +84,17 @@ const Home = () => {
       cleanupAnimations(scrollContexts)
     }
   }, [])
+
+  // Handle section scroll from navigation state
+  useEffect(() => {
+    if (location.state?.scrollTo) {
+      const section = location.state.scrollTo
+      // Small delay to ensure page has rendered
+      setTimeout(() => {
+        section.current?.scrollIntoView({ behavior: 'smooth' })
+      }, 100)
+    }
+  }, [location.state])
 
   const scrollToSection = (ref) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' })

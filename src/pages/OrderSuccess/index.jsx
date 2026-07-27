@@ -2,21 +2,57 @@ import "./OrderSuccess.css";
 import { useEffect } from "react";
 import { useApp } from "../../context/AppContext";
 
+import Navigation from "../../components/layout/Navigation";
+import Footer from "../../components/layout/Footer";
+
 import SuccessHero from "./components/SuccessHero/SuccessHero";
 import OrderDetails from "./components/OrderDetails/OrderDetails";
 import ActionButtons from "./components/ActionButtons/ActionButtons";
 
-import Footer from "../../components/layout/Footer";
-
 const OrderSuccess = () => {
-  const { currentOrder } = useApp();
+  const { currentOrder, user, cart, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [currentOrder]);
+  const handleCartOpen = () => {
+    setCartOpen(true);
+  };
+
+  const handleLoginOpen = () => {
+    setLoginOpen(true);
+  };
+
+  const handleOrderHistoryOpen = () => {
+    setOrderHistoryOpen(true);
+  };
+
+  const handleBookingOpen = () => {
+    setBookingOpen(true);
+  };
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   return (
     <div className="order-success-page">
+
+      <Navigation
+        user={user}
+        cart={cart}
+        testLoading={testLoading}
+        onCartOpen={handleCartOpen}
+        onLoginOpen={handleLoginOpen}
+        onOrderHistoryOpen={handleOrderHistoryOpen}
+        onLogout={handleLogout}
+        onTestAuth={handleTestAuth}
+        onBookingOpen={handleBookingOpen}
+        onScrollToSection={() => {}}
+        trendingRef={null}
+        styleEditRef={null}
+        atelierRef={null}
+        heroRef={null}
+        mobileMenuOpen={mobileMenuOpen}
+        onMobileMenuToggle={handleMobileMenuToggle}
+      />
 
       <SuccessHero orderId={currentOrder?.id} />
 
@@ -24,7 +60,14 @@ const OrderSuccess = () => {
 
       <ActionButtons />
 
-      <Footer />
+      <Footer
+        onScrollToSection={() => {}}
+        trendingRef={null}
+        styleEditRef={null}
+        atelierRef={null}
+        heroRef={null}
+        onBookingOpen={handleBookingOpen}
+      />
 
     </div>
   );

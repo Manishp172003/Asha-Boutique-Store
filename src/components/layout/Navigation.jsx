@@ -1,5 +1,5 @@
 import { ShoppingBag, User, LogOut, Package, CheckCircle, Menu, X } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useApp } from '../../context/AppContext'
 
@@ -21,7 +21,20 @@ const Navigation = ({
   mobileMenuOpen,
   onMobileMenuToggle,
 }) => {
+  const navigate = useNavigate();
+  const location = useLocation();
   const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+  const handleScrollToSection = (section) => {
+    if (location.pathname === '/') {
+      // Already on Home page, use direct scroll
+      onScrollToSection(section);
+    } else {
+      // Navigate to Home with section state
+      navigate('/', { state: { scrollTo: section } });
+    }
+  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 px-3 py-2 md:px-6 md:py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md w-full overflow-x-hidden">
@@ -30,9 +43,9 @@ const Navigation = ({
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
           <Link to="/shop" className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Shop</Link>
-          <button onClick={() => onScrollToSection(styleEditRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Lookbook</button>
-          <button onClick={() => onScrollToSection(atelierRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Atelier</button>
-          <button onClick={() => onScrollToSection(heroRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Visit</button>
+          <button onClick={() => handleScrollToSection(styleEditRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Lookbook</button>
+          <button onClick={() => handleScrollToSection(atelierRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Atelier</button>
+          <button onClick={() => handleScrollToSection(heroRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Visit</button>
 
           {/* Cart Icon */}
           <button
@@ -151,9 +164,9 @@ const Navigation = ({
               </div>
             )}
             <Link to="/shop" className="text-lg text-[#2B1E1A]">Shop</Link>
-            <button onClick={() => onScrollToSection(styleEditRef)} className="text-lg text-[#2B1E1A]">Lookbook</button>
-            <button onClick={() => onScrollToSection(atelierRef)} className="text-lg text-[#2B1E1A]">Atelier</button>
-            <button onClick={() => onScrollToSection(heroRef)} className="text-lg text-[#2B1E1A]">Visit</button>
+            <button onClick={() => handleScrollToSection(styleEditRef)} className="text-lg text-[#2B1E1A]">Lookbook</button>
+            <button onClick={() => handleScrollToSection(atelierRef)} className="text-lg text-[#2B1E1A]">Atelier</button>
+            <button onClick={() => handleScrollToSection(heroRef)} className="text-lg text-[#2B1E1A]">Visit</button>
             {user && (
               <button
                 onClick={() => {

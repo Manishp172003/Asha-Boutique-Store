@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./ProductGallery.css";
 
 const ProductGallery = ({ product }) => {
@@ -6,6 +6,11 @@ const ProductGallery = ({ product }) => {
   const [selectedImage, setSelectedImage] = useState(product.image);
 
   const images = [product.image];
+
+  // Reset selected image when product changes
+  useEffect(() => {
+    setSelectedImage(product.image);
+  }, [product.id]);
 
   return (
 

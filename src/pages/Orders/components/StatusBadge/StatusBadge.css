@@ -1,0 +1,29 @@
+.status-badge{
+    display:inline-block;
+    padding:6px 14px;
+    border-radius:20px;
+    font-size:13px;
+    font-weight:600;
+    text-transform:uppercase;
+    letter-spacing:0.5px;
+}
+
+.status-badge.processing{
+    background:#FFF4E5;
+    color:#E6A335;
+}
+
+.status-badge.shipped{
+    background:#E5F4FF;
+    color:#3599E6;
+}
+
+.status-badge.delivered{
+    background:#E5FFE8;
+    color:#35E66A;
+}
+
+.status-badge.cancelled{
+    background:#FFE5E5;
+    color:#E63535;
+}
