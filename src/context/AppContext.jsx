@@ -132,12 +132,6 @@ export const AppProvider = ({ children }) => {
   }
 
   const placeOrder = (shippingInfo, paymentMethod) => {
-    if (!user) {
-      toast.error('Please login to place an order')
-      setLoginOpen(true)
-      return
-    }
-
     const order = {
       id: generateOrderId(),
       items: cart,

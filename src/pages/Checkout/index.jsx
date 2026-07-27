@@ -18,6 +18,7 @@ const Checkout = () => {
     }
 
     placeOrder(shippingInfo, paymentMethod);
+    window.scrollTo(0, 0);
     navigate('/order-success');
   };
 

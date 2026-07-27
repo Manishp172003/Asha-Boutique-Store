@@ -1,12 +1,33 @@
-const OrderSuccess = () => {
-  return (
-    <div className="min-h-screen bg-[#F6F2EE] flex items-center justify-center px-6">
-      <div className="text-center">
-        <h1 className="font-serif text-3xl text-[#2B1E1A] mb-4">Order Success Page</h1>
-        <p className="text-[#7A655D]">This page will be designed and implemented later.</p>
-      </div>
-    </div>
-  )
-}
+import "./OrderSuccess.css";
+import { useEffect } from "react";
+import { useApp } from "../../context/AppContext";
 
-export default OrderSuccess
+import SuccessHero from "./components/SuccessHero/SuccessHero";
+import OrderDetails from "./components/OrderDetails/OrderDetails";
+import ActionButtons from "./components/ActionButtons/ActionButtons";
+
+import Footer from "../../components/layout/Footer";
+
+const OrderSuccess = () => {
+  const { currentOrder } = useApp();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [currentOrder]);
+
+  return (
+    <div className="order-success-page">
+
+      <SuccessHero orderId={currentOrder?.id} />
+
+      <OrderDetails order={currentOrder} />
+
+      <ActionButtons />
+
+      <Footer />
+
+    </div>
+  );
+};
+
+export default OrderSuccess;
