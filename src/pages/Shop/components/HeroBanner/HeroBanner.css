@@ -1,0 +1,52 @@
+.shop-hero {
+  position: relative;
+  width: 100%;
+  height: 520px;
+  overflow: hidden;
+}
+
+.shop-hero-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.shop-hero-overlay {
+  position: absolute;
+  inset: 0;
+
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  color: #fff;
+}
+
+.shop-hero-subtitle {
+  font-family: Georgia, serif;
+  font-size: 24px;
+  margin-bottom: 24px;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, .4);
+}
+
+.shop-hero-btn {
+  width: 180px;
+  height: 54px;
+
+  border: none;
+  border-radius: 999px;
+
+  background: #fff;
+  color: #3a2a23;
+
+  font-size: 14px;
+  letter-spacing: 2px;
+
+  cursor: pointer;
+  transition: .3s;
+}
+
+.shop-hero-btn:hover {
+  transform: translateY(-2px);
+}

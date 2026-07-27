@@ -1,4 +1,5 @@
 import { Scissors } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 const CuratedCollection = ({ curatedRef, trendingRef, onScrollToSection }) => {
@@ -13,12 +14,11 @@ const CuratedCollection = ({ curatedRef, trendingRef, onScrollToSection }) => {
           <p className="text-lg text-[#7A655D] mb-8 max-w-md">
             A tight edit of pieces that layer easily, move comfortably, and photograph beautifully.
           </p>
-          <Button 
-            onClick={() => onScrollToSection(trendingRef)}
-            className="bg-[#2B1E1A] hover:bg-[#3d2b25] text-white rounded-full px-8"
-          >
-            Explore Collection
-          </Button>
+          <Link to="/shop">
+            <Button className="bg-[#2B1E1A] hover:bg-[#3d2b25] text-white rounded-full px-8">
+              Explore Collection
+            </Button>
+          </Link>
 
           {/* Tailoring Notes Card */}
           <div className="mt-12 bg-white rounded-[22px] p-6 shadow-lg max-w-sm">

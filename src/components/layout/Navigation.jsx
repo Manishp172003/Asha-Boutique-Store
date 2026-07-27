@@ -1,5 +1,7 @@
 import { ShoppingBag, User, LogOut, Package, CheckCircle, Menu, X } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { useApp } from '../../context/AppContext'
 
 const Navigation = ({
   user,
@@ -19,6 +21,7 @@ const Navigation = ({
   mobileMenuOpen,
   onMobileMenuToggle,
 }) => {
+  const cartCount = cart.reduce((sum, item) => sum + item.quantity, 0);
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 px-3 py-2 md:px-6 md:py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md w-full overflow-x-hidden">
@@ -26,7 +29,7 @@ const Navigation = ({
         
         {/* Desktop Nav */}
         <div className="hidden md:flex items-center gap-8">
-          <button onClick={() => onScrollToSection(trendingRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Shop</button>
+          <Link to="/shop" className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Shop</Link>
           <button onClick={() => onScrollToSection(styleEditRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Lookbook</button>
           <button onClick={() => onScrollToSection(atelierRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Atelier</button>
           <button onClick={() => onScrollToSection(heroRef)} className="text-sm text-[#2B1E1A] hover:text-[#E46A53] transition-colors">Visit</button>
@@ -37,9 +40,9 @@ const Navigation = ({
             className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
           >
             <ShoppingBag size={24} />
-            {cart.length > 0 && (
+            {cartCount > 0 && (
               <span className="absolute -top-2 -right-2 bg-[#E46A53] text-white text-xs w-5 h-5 rounded-full flex items-center justify-center">
-                {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                {cartCount}
               </span>
             )}
           </button>
@@ -97,9 +100,9 @@ const Navigation = ({
             className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
           >
             <ShoppingBag size={18} />
-            {cart.length > 0 && (
+            {cartCount > 0 && (
               <span className="absolute -top-1 -right-1 bg-[#E46A53] text-white text-[10px] w-3.5 h-3.5 rounded-full flex items-center justify-center">
-                {cart.reduce((sum, item) => sum + item.quantity, 0)}
+                {cartCount}
               </span>
             )}
           </button>
@@ -147,7 +150,7 @@ const Navigation = ({
                 </div>
               </div>
             )}
-            <button onClick={() => onScrollToSection(trendingRef)} className="text-lg text-[#2B1E1A]">Shop</button>
+            <Link to="/shop" className="text-lg text-[#2B1E1A]">Shop</Link>
             <button onClick={() => onScrollToSection(styleEditRef)} className="text-lg text-[#2B1E1A]">Lookbook</button>
             <button onClick={() => onScrollToSection(atelierRef)} className="text-lg text-[#2B1E1A]">Atelier</button>
             <button onClick={() => onScrollToSection(heroRef)} className="text-lg text-[#2B1E1A]">Visit</button>

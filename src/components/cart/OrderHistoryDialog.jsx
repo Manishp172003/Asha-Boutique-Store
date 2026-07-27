@@ -50,7 +50,7 @@ const OrderHistoryDialog = ({ open, onOpenChange, orders, getUserOrders }) => {
                       {order.items.map((item) => (
                         <div key={item.id} className="flex justify-between text-sm">
                           <span className="text-[#7A655D]">{item.name} x{item.quantity}</span>
-                          <span className="text-[#2B1E1A]">₹{(parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity).toLocaleString()}</span>
+                          <span className="text-[#2B1E1A]">₹{(item.price * item.quantity).toLocaleString('en-IN')}</span>
                         </div>
                       ))}
                     </div>

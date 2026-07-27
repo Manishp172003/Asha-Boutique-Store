@@ -90,7 +90,7 @@ const Home = () => {
   }
 
   const cartTotal = cart.reduce((sum, item) => {
-    return sum + (parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity)
+    return sum + (item.price * item.quantity)
   }, 0)
 
   return (

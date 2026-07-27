@@ -1,12 +1,25 @@
+import "./Shop.css";
+
+import HeroBanner from "./components/HeroBanner/HeroBanner";
+import Breadcrumb from "./components/Breadcrumb/Breadcrumb";
+import SearchSort from "./components/SearchSort/SearchSort";
+import Sidebar from "./components/Sidebar/Sidebar";
+import ProductGrid from "./components/ProductGrid/ProductGrid";
+import Pagination from "./components/Pagination/Pagination";
+import Newsletter from "./components/Newsletter/Newsletter";
+
 const Shop = () => {
   return (
-    <div className="min-h-screen bg-[#F6F2EE] flex items-center justify-center px-6">
-      <div className="text-center">
-        <h1 className="font-serif text-3xl text-[#2B1E1A] mb-4">Shop Page</h1>
-        <p className="text-[#7A655D]">This page will be designed and implemented later.</p>
-      </div>
-    </div>
-  )
-}
+    <div className="shop-page">
 
-export default Shop
+      <HeroBanner />
+      <Breadcrumb />
+      <SearchSort />
+      <ProductGrid />
+      <Pagination />
+      <Newsletter />
+    </div>
+  );
+};
+
+export default Shop;

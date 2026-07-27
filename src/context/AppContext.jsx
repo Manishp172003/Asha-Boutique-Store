@@ -5,14 +5,14 @@ import { testAuth } from '../services/testService'
 
 // Product Data
 const products = [
-  { id: 1, name: 'Pleat-Front Blouse', price: '₹2,400', image: '/images/product1.jpg', category: 'Tops' },
-  { id: 2, name: 'Tiered Midi Dress', price: '₹3,800', image: '/images/product2.jpg', category: 'Dresses' },
-  { id: 3, name: 'Tailored Trousers', price: '₹2,900', image: '/images/product3.jpg', category: 'Tailoring' },
-  { id: 4, name: 'Cropped Linen Jacket', price: '₹3,200', image: '/images/product4.jpg', category: 'Tops' },
-  { id: 5, name: 'Handloom Kurta Set', price: '₹4,100', image: '/images/product5.jpg', category: 'Dresses' },
-  { id: 6, name: 'Silk Scarf', price: '₹1,200', image: '/images/product6.jpg', category: 'Accessories' },
-  { id: 7, name: 'Embroidered Tote', price: '₹1,800', image: '/images/product7.jpg', category: 'Accessories' },
-  { id: 8, name: 'Block-Print Dupatta', price: '₹1,500', image: '/images/product8.jpg', category: 'Accessories' },
+  { id: 1, name: 'Pleat-Front Blouse', price: 2400, image: '/images/product1.jpg', category: 'Tops' },
+  { id: 2, name: 'Tiered Midi Dress', price: 3800, image: '/images/product2.jpg', category: 'Dresses' },
+  { id: 3, name: 'Tailored Trousers', price: 2900, image: '/images/product3.jpg', category: 'Tailoring' },
+  { id: 4, name: 'Cropped Linen Jacket', price: 3200, image: '/images/product4.jpg', category: 'Tops' },
+  { id: 5, name: 'Handloom Kurta Set', price: 4100, image: '/images/product5.jpg', category: 'Dresses' },
+  { id: 6, name: 'Silk Scarf', price: 1200, image: '/images/product6.jpg', category: 'Accessories' },
+  { id: 7, name: 'Embroidered Tote', price: 1800, image: '/images/product7.jpg', category: 'Accessories' },
+  { id: 8, name: 'Block-Print Dupatta', price: 1500, image: '/images/product8.jpg', category: 'Accessories' },
 ]
 
 const productDetails = {
@@ -142,7 +142,7 @@ export const AppProvider = ({ children }) => {
       id: generateOrderId(),
       items: cart,
       total: cart.reduce((sum, item) => {
-        return sum + (parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity)
+        return sum + (item.price * item.quantity)
       }, 0),
       shippingInfo,
       paymentMethod,

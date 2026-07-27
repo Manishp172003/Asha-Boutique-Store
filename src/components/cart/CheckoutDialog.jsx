@@ -24,13 +24,13 @@ const CheckoutDialog = ({ open, onOpenChange, cart, cartTotal, shippingInfo, pay
               {cart.map((item) => (
                 <div key={item.id} className="flex justify-between text-sm">
                   <span className="text-[#7A655D]">{item.name} x{item.quantity}</span>
-                  <span className="text-[#2B1E1A]">₹{(parseInt(item.price.replace(/[₹,]/g, '')) * item.quantity).toLocaleString()}</span>
+                  <span className="text-[#2B1E1A]">₹{(item.price * item.quantity).toLocaleString('en-IN')}</span>
                 </div>
               ))}
               <div className="border-t border-[#E9E3DD] pt-2 mt-2">
                 <div className="flex justify-between font-semibold">
                   <span className="text-[#2B1E1A]">Total</span>
-                  <span className="text-[#2B1E1A] text-lg">₹{cartTotal.toLocaleString()}</span>
+                  <span className="text-[#2B1E1A] text-lg">₹{cartTotal.toLocaleString('en-IN')}</span>
                 </div>
               </div>
             </div>

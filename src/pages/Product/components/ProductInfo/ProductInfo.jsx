@@ -1,0 +1,143 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useApp } from "../../../../context/AppContext";
+import "./ProductInfo.css";
+
+const colors = [
+  "#C77057",
+  "#F4F0D8",
+  "#FFFFFF",
+  "#4D3728"
+];
+
+const sizes = ["XS", "S", "M", "L", "XL"];
+
+const ProductInfo = ({ product }) => {
+  const navigate = useNavigate();
+  const { addToCart } = useApp();
+
+  const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [selectedSize, setSelectedSize] = useState("S");
+
+  const handleAddToCart = () => {
+    addToCart(product);
+    navigate('/cart');
+  };
+
+  const handleBuyNow = () => {
+    addToCart(product);
+    navigate('/checkout');
+  };
+
+  const formattedPrice = `₹${product.price.toLocaleString('en-IN')}`;
+
+  return (
+
+    <div className="product-info">
+
+      <span className="collection-name">
+        {product.category}
+      </span>
+
+      <h1>{product.name}</h1>
+
+      <div className="product-rating">
+        ★★★★★
+        <span>({product.rating} reviews)</span>
+      </div>
+
+      <h2 className="product-price">{formattedPrice}</h2>
+
+      <p className="product-description">
+        Handcrafted from the finest materials,
+        designed for an effortless, elegant silhouette.
+      </p>
+
+      {/* Color */}
+
+      <div className="option-group">
+
+        <label>Color: Terracotta</label>
+
+        <div className="color-list">
+
+          {colors.map((color) => (
+
+            <button
+              key={color}
+              className={`color-circle ${
+                selectedColor === color ? "active" : ""
+              }`}
+              style={{ background: color }}
+              onClick={() => setSelectedColor(color)}
+            />
+
+          ))}
+
+        </div>
+
+      </div>
+
+      {/* Size */}
+
+      <div className="option-group">
+
+        <div className="size-header">
+
+          <label>Size</label>
+
+          <button className="size-guide">
+            Size Guide
+          </button>
+
+        </div>
+
+        <div className="size-list">
+
+          {sizes.map((size) => (
+
+            <button
+              key={size}
+              className={`size-btn ${
+                selectedSize === size ? "active" : ""
+              }`}
+              onClick={() => setSelectedSize(size)}
+            >
+              {size}
+            </button>
+
+          ))}
+
+        </div>
+
+      </div>
+
+      <button className="cart-btn" onClick={handleAddToCart}>
+        ADD TO CART
+      </button>
+
+      <button className="buy-btn" onClick={handleBuyNow}>
+        BUY IT NOW
+      </button>
+
+      <div className="service-boxes">
+
+        <div className="service-card">
+          <h4>Fast Delivery</h4>
+          <p>Arrives in 3–5 days</p>
+        </div>
+
+        <div className="service-card">
+          <h4>Easy Returns</h4>
+          <p>30-day free window</p>
+        </div>
+
+      </div>
+
+    </div>
+
+  );
+
+};
+
+export default ProductInfo;

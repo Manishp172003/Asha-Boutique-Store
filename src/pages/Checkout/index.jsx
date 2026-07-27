@@ -1,12 +1,34 @@
+import "./Checkout.css";
+import { useApp } from "../../context/AppContext";
+import { useNavigate } from "react-router-dom";
+import { toast } from "sonner";
+
+import CheckoutForm from "./components/CheckoutForm/CheckoutForm";
+import OrderSummary from "./components/OrderSummary/OrderSummary";
+
 const Checkout = () => {
+  const { cart, placeOrder } = useApp();
+  const navigate = useNavigate();
+
+  const handlePlaceOrder = (shippingInfo, paymentMethod) => {
+    if (cart.length === 0) {
+      toast.error("Your cart is empty");
+      navigate('/shop');
+      return;
+    }
+
+    placeOrder(shippingInfo, paymentMethod);
+    navigate('/order-success');
+  };
+
   return (
-    <div className="min-h-screen bg-[#F6F2EE] flex items-center justify-center px-6">
-      <div className="text-center">
-        <h1 className="font-serif text-3xl text-[#2B1E1A] mb-4">Checkout Page</h1>
-        <p className="text-[#7A655D]">This page will be designed and implemented later.</p>
+    <div className="checkout-page">
+      <div className="checkout-container">
+        <CheckoutForm onPlaceOrder={handlePlaceOrder} />
+        <OrderSummary />
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default Checkout
+export default Checkout;

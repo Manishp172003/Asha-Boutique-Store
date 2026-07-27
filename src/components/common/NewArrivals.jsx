@@ -1,4 +1,5 @@
 import { ArrowRight } from 'lucide-react'
+import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 
 const NewArrivals = ({ newArrivalsRef, trendingRef, styleEditRef, onScrollToSection }) => {
@@ -36,12 +37,11 @@ const NewArrivals = ({ newArrivalsRef, trendingRef, styleEditRef, onScrollToSect
         </p>
       </div>
       <div className="absolute bottom-6 left-4 md:bottom-16 md:left-12 z-10">
-        <Button
-          onClick={() => onScrollToSection(trendingRef)}
-          className="bg-white text-[#2B1E1A] hover:bg-[#F6F2EE] rounded-full px-4 md:px-6 text-sm"
-        >
-          Shop New In
-        </Button>
+        <Link to="/shop">
+          <Button className="bg-white text-[#2B1E1A] hover:bg-[#F6F2EE] rounded-full px-4 md:px-6 text-sm">
+            Shop New In
+          </Button>
+        </Link>
       </div>
       <div className="absolute bottom-8 right-6 lg:bottom-16 lg:right-12">
         <button 
