@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useApp } from "../../../../context/AppContext";
+import { Button } from "@/components/ui/button";
 import "./ProductInfo.css";
 
 const colors = [
@@ -135,13 +136,13 @@ const ProductInfo = ({ product }) => {
 
       </div>
 
-      <button className="cart-btn" onClick={handleAddToCart}>
+      <Button variant="primary" onClick={handleAddToCart} className="w-full mb-3">
         ADD TO CART
-      </button>
+      </Button>
 
-      <button className="buy-btn" onClick={handleBuyNow}>
+      <Button variant="primary" onClick={handleBuyNow} className="w-full">
         BUY IT NOW
-      </button>
+      </Button>
 
       <div className="service-boxes">
 

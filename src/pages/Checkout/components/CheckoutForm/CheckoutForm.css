@@ -61,7 +61,7 @@
 }
 
 .form-group input:focus {
-  border-color: #C77057;
+  border-color: #E46A53;
 }
 
 .payment-options {
@@ -82,14 +82,14 @@
 }
 
 .payment-option:hover {
-  border-color: #C77057;
+  border-color: #E46A53;
   background: #F8ECE7;
 }
 
 .payment-option input[type="radio"] {
   width: 20px;
   height: 20px;
-  accent-color: #C77057;
+  accent-color: #E46A53;
 }
 
 .payment-option span {
@@ -103,7 +103,7 @@
   height: 56px;
   border: none;
   border-radius: 999px;
-  background: #C77057;
+  background: #E46A53;
   color: #fff;
   font-size: 16px;
   font-weight: 600;
@@ -114,7 +114,7 @@
 }
 
 .place-order-btn:hover {
-  background: #B65F46;
+  background: #E46A53;
 }
 
 @media (max-width: 768px) {

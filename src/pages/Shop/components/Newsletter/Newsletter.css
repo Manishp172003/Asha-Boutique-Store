@@ -24,7 +24,7 @@
 
     background:#EFE5DF;
 
-    color:#C77057;
+    color:#E46A53;
 
     font-size:14px;
 
@@ -107,7 +107,7 @@
 
     border-radius:999px;
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 
@@ -122,7 +122,7 @@
 
 .newsletter-form button:hover{
 
-    background:#B86048;
+    background:#E46A53;
 
     transform:translateY(-2px);
 }

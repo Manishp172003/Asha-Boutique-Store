@@ -1,7 +1,10 @@
 import "./Orders.css";
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { ShoppingBag } from "lucide-react";
+import { animateOrdersPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { Button } from "@/components/ui/button";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -10,8 +13,24 @@ import OrdersHeader from "./components/OrdersHeader/OrdersHeader";
 import OrdersList from "./components/OrdersList/OrdersList";
 
 const Orders = () => {
-  const { orders, user, cart, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
+  const { orders, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
   const navigate = useNavigate();
+
+  const ordersRef = useRef(null);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Initialize animations
+  useEffect(() => {
+    if (!orders || orders.length === 0) return;
+    const contexts = animateOrdersPage({ ordersRef });
+    return () => cleanupAnimations(contexts);
+  }, [orders]);
 
   const sortedOrders = [...orders].sort((a, b) => {
     return new Date(b.createdAt) - new Date(a.createdAt);
@@ -21,14 +40,6 @@ const Orders = () => {
 
   const handleCartOpen = () => {
     setCartOpen(true);
-  };
-
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
   };
 
   const handleBookingOpen = () => {
@@ -45,12 +56,8 @@ const Orders = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -70,12 +77,14 @@ const Orders = () => {
           </div>
           <h2>No Orders Yet</h2>
           <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>
-          <button className="continue-shopping-btn" onClick={() => navigate('/shop')}>
+          <Button variant="primary" onClick={() => navigate('/shop')}>
             Continue Shopping
-          </button>
+          </Button>
         </div>
       ) : (
-        <OrdersList orders={sortedOrders} />
+        <div ref={ordersRef}>
+          <OrdersList orders={sortedOrders} />
+        </div>
       )}
 
       <Footer

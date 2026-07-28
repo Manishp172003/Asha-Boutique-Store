@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useRef, useEffect } from "react";
 import "./Product.css";
 import { useApp } from "../../context/AppContext";
+import { animateProductPage, cleanupAnimations } from "../../animations/gsapAnimations";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -20,16 +22,30 @@ const Product = () => {
   const {
     user,
     cart,
-    testLoading,
     mobileMenuOpen,
     setCartOpen,
-    setLoginOpen,
-    setOrderHistoryOpen,
     setBookingOpen,
     setMobileMenuOpen,
     handleLogout,
-    handleTestAuth,
   } = useApp();
+
+  const galleryRef = useRef(null);
+  const infoRef = useRef(null);
+  const tabsRef = useRef(null);
+  const relatedRef = useRef(null);
+  const recentlyRef = useRef(null);
+
+  // Initialize animations
+  useEffect(() => {
+    const contexts = animateProductPage({
+      galleryRef,
+      infoRef,
+      tabsRef,
+      relatedRef,
+      recentlyRef
+    });
+    return () => cleanupAnimations(contexts);
+  }, []);
 
   const product = products.find((p) => p.id === parseInt(id));
 
@@ -40,14 +56,6 @@ const Product = () => {
 
   const handleCartOpen = () => {
     setCartOpen(true);
-  };
-
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
   };
 
   const handleBookingOpen = () => {
@@ -64,12 +72,8 @@ const Product = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -83,15 +87,25 @@ const Product = () => {
       <ProductBreadcrumb productName={product.name} />
 
       <section className="product-top">
-        <ProductGallery product={product} />
-        <ProductInfo product={product} />
+        <div ref={galleryRef} className="product-gallery">
+          <ProductGallery product={product} />
+        </div>
+        <div ref={infoRef} className="product-info">
+          <ProductInfo product={product} />
+        </div>
       </section>
 
-      <DescriptionTabs />
+      <div ref={tabsRef} className="description-tabs">
+        <DescriptionTabs />
+      </div>
 
-      <RelatedProducts currentProductId={product.id} />
+      <div ref={relatedRef}>
+        <RelatedProducts currentProductId={product.id} />
+      </div>
 
-      <RecentlyViewed currentProductId={product.id} />
+      <div ref={recentlyRef}>
+        <RecentlyViewed currentProductId={product.id} />
+      </div>
 
       <Footer
         onScrollToSection={() => {}}

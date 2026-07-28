@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import "./ActionButtons.css";
 
 const ActionButtons = () => {
@@ -19,19 +20,19 @@ const ActionButtons = () => {
 
       <div className="action-buttons">
 
-        <button
-          className="continue-btn"
+        <Button
+          variant="primary"
           onClick={handleContinueShopping}
         >
           Continue Shopping
-        </button>
+        </Button>
 
-        <button
-          className="manage-btn"
+        <Button
+          variant="primary"
           onClick={handleManageOrder}
         >
           Manage Order
-        </button>
+        </Button>
 
       </div>
 

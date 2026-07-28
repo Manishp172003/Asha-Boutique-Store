@@ -1,7 +1,10 @@
 import "./OrderDetails.css";
-import { useParams, useNavigate, useEffect } from "react";
+import { useRef, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import StatusBadge from "../Orders/components/StatusBadge/StatusBadge";
+import { animateOrderDetailsPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { Button } from "@/components/ui/button";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -9,7 +12,18 @@ import Footer from "../../components/layout/Footer";
 const OrderDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { orders, user, cart, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
+  const { orders, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
+
+  const breadcrumbRef = useRef(null);
+  const detailsRef = useRef(null);
+  const timelineRef = useRef(null);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
 
   const order = orders.find(o => o.id === id);
 
@@ -18,6 +32,17 @@ const OrderDetails = () => {
       navigate('/orders');
     }
   }, [order, navigate]);
+
+  // Initialize animations
+  useEffect(() => {
+    if (!order) return;
+    const contexts = animateOrderDetailsPage({
+      breadcrumbRef,
+      detailsRef,
+      timelineRef
+    });
+    return () => cleanupAnimations(contexts);
+  }, [order]);
 
   if (!order) {
     return null;
@@ -58,14 +83,6 @@ const OrderDetails = () => {
     setCartOpen(true);
   };
 
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
-  };
-
   const handleBookingOpen = () => {
     setBookingOpen(true);
   };
@@ -80,12 +97,8 @@ const OrderDetails = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -96,14 +109,14 @@ const OrderDetails = () => {
         onMobileMenuToggle={handleMobileMenuToggle}
       />
 
-      <div className="order-details-header">
+      <div ref={breadcrumbRef} className="order-details-header order-breadcrumb">
         <button className="back-btn" onClick={handleBackToOrders}>
           ← Back to Orders
         </button>
         <h1>Order Details</h1>
       </div>
 
-      <div className="order-details-content">
+      <div ref={detailsRef} className="order-details-content order-details-section">
 
         <div className="order-info-card">
 
@@ -219,9 +232,9 @@ const OrderDetails = () => {
 
         <div className="order-actions">
 
-          <button className="continue-shopping-btn" onClick={handleContinueShopping}>
+          <Button variant="primary" onClick={handleContinueShopping}>
             Continue Shopping
-          </button>
+          </Button>
 
           <button className="back-to-orders-btn" onClick={handleBackToOrders}>
             Back to Orders

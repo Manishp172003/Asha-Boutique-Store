@@ -1,7 +1,9 @@
 import "./Checkout.css";
+import { useRef, useEffect } from "react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { toast } from "sonner";
+import { animateCheckoutPage, cleanupAnimations } from "../../animations/gsapAnimations";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -10,8 +12,20 @@ import CheckoutForm from "./components/CheckoutForm/CheckoutForm";
 import OrderSummary from "./components/OrderSummary/OrderSummary";
 
 const Checkout = () => {
-  const { cart, placeOrder, user, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
+  const { cart, placeOrder, user, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
   const navigate = useNavigate();
+
+  const formRef = useRef(null);
+  const summaryRef = useRef(null);
+
+  // Initialize animations
+  useEffect(() => {
+    const contexts = animateCheckoutPage({
+      formRef,
+      summaryRef
+    });
+    return () => cleanupAnimations(contexts);
+  }, []);
 
   const handlePlaceOrder = (shippingInfo, paymentMethod) => {
     if (cart.length === 0) {
@@ -28,14 +42,6 @@ const Checkout = () => {
     setCartOpen(true);
   };
 
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
-  };
-
   const handleBookingOpen = () => {
     setBookingOpen(true);
   };
@@ -50,12 +56,8 @@ const Checkout = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -67,8 +69,12 @@ const Checkout = () => {
       />
 
       <div className="checkout-container">
-        <CheckoutForm onPlaceOrder={handlePlaceOrder} />
-        <OrderSummary />
+        <div ref={formRef} className="checkout-form">
+          <CheckoutForm onPlaceOrder={handlePlaceOrder} />
+        </div>
+        <div ref={summaryRef} className="checkout-summary">
+          <OrderSummary />
+        </div>
       </div>
 
       <Footer

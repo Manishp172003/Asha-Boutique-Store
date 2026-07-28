@@ -8,7 +8,7 @@
 
 .collection-name{
 
-    color:#C77057;
+    color:#E46A53;
 
     font-size:13px;
 
@@ -32,7 +32,7 @@
 
 .product-rating{
 
-    color:#C77057;
+    color:#E46A53;
 
     font-size:18px;
 
@@ -105,7 +105,7 @@
 
 .color-circle.active{
 
-    outline:2px solid #C77057;
+    outline:2px solid #E46A53;
 
     outline-offset:4px;
 }
@@ -125,7 +125,7 @@
 
     background:none;
 
-    color:#C77057;
+    color:#E46A53;
 
     cursor:pointer;
 }
@@ -156,16 +156,16 @@
 
 .size-btn.active{
 
-    border-color:#C77057;
+    border-color:#E46A53;
 
-    color:#C77057;
+    color:#E46A53;
 }
 
 .cart-btn{
 
     height:58px;
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 

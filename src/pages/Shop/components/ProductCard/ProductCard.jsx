@@ -2,6 +2,7 @@ import "./ProductCard.css";
 import { Heart, Eye, ShoppingBag, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../../context/AppContext";
+import { Button } from "@/components/ui/button";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -65,10 +66,10 @@ const ProductCard = ({ product }) => {
             Quick View
           </button>
 
-          <button onClick={handleAddToCart}>
+          <Button variant="primary" onClick={handleAddToCart} className="add-to-cart-btn">
             <ShoppingBag size={18} />
             Add to Cart
-          </button>
+          </Button>
 
         </div>
 

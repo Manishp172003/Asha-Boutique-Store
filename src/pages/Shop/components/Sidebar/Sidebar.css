@@ -74,7 +74,7 @@
 
 .category-list .active{
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 }
@@ -85,7 +85,7 @@
 
     width:100%;
 
-    accent-color:#C77057;
+    accent-color:#E46A53;
 
     margin-bottom:12px;
 }
@@ -174,11 +174,11 @@
 
 .size-options button:hover{
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 
-    border-color:#C77057;
+    border-color:#E46A53;
 }
 
 /* Clear */
@@ -206,7 +206,7 @@
 
 .clear-filter:hover{
 
-    background:#C77057;
+    background:#E46A53;
 }
 
 /* Mobile */

@@ -1,7 +1,10 @@
 import "./Wishlist.css";
+import { useRef, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useApp } from "../../context/AppContext";
+import { animateWishlistPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { Button } from "@/components/ui/button";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -13,21 +16,29 @@ import EditorialSection from "./components/EditorialSection/EditorialSection";
 import Newsletter from "../Shop/components/Newsletter/Newsletter";
 
 const Wishlist = () => {
-  const { wishlist, user, cart, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
+  const { wishlist, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
   const navigate = useNavigate();
+
+  const wishlistRef = useRef(null);
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Initialize animations
+  useEffect(() => {
+    if (!wishlist || wishlist.length === 0) return;
+    const contexts = animateWishlistPage({ wishlistRef });
+    return () => cleanupAnimations(contexts);
+  }, [wishlist]);
 
   const isEmpty = wishlist.length === 0;
 
   const handleCartOpen = () => {
     setCartOpen(true);
-  };
-
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
   };
 
   const handleBookingOpen = () => {
@@ -44,12 +55,8 @@ const Wishlist = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -69,13 +76,15 @@ const Wishlist = () => {
           </div>
           <h2>Your Wishlist is Empty</h2>
           <p>Looks like you haven't saved any beautiful pieces yet.</p>
-          <button className="continue-shopping-btn" onClick={() => navigate('/shop')}>
+          <Button variant="primary" onClick={() => navigate('/shop')}>
             Continue Shopping
-          </button>
+          </Button>
         </div>
       ) : (
         <>
-          <WishlistGrid />
+          <div ref={wishlistRef}>
+            <WishlistGrid />
+          </div>
           <EditorialSection />
         </>
       )}

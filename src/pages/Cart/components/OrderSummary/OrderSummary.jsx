@@ -1,5 +1,6 @@
 import { ShieldCheck, Truck, RotateCcw } from "lucide-react";
 import { useNavigate } from "react-router-dom";
+import { Button } from "@/components/ui/button";
 import "./OrderSummary.css";
 
 const OrderSummary = ({ cartTotal, cartCount }) => {
@@ -53,16 +54,14 @@ const OrderSummary = ({ cartTotal, cartCount }) => {
 
       </div>
 
-      <button 
-        className="checkout-btn" 
+      <Button
+        variant="primary"
         onClick={handleCheckout}
         disabled={cartCount === 0}
-        style={{ opacity: cartCount === 0 ? 0.5 : 1, cursor: cartCount === 0 ? 'not-allowed' : 'pointer' }}
+        className="w-full"
       >
-
         Proceed to Checkout
-
-      </button>
+      </Button>
 
       <div className="summary-divider"></div>
 

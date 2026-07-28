@@ -1,6 +1,8 @@
 import "./Shop.css";
+import { useRef, useEffect } from "react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import { animateShopPage, cleanupAnimations } from "../../animations/gsapAnimations";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -18,16 +20,30 @@ const Shop = () => {
   const {
     user,
     cart,
-    testLoading,
     mobileMenuOpen,
     setCartOpen,
-    setLoginOpen,
-    setOrderHistoryOpen,
     setBookingOpen,
     setMobileMenuOpen,
     handleLogout,
-    handleTestAuth,
   } = useApp();
+
+  const heroRef = useRef(null);
+  const containerRef = useRef(null);
+  const productGridRef = useRef(null);
+  const paginationRef = useRef(null);
+  const newsletterRef = useRef(null);
+
+  // Initialize animations
+  useEffect(() => {
+    const contexts = animateShopPage({
+      heroRef,
+      containerRef,
+      productGridRef,
+      paginationRef,
+      newsletterRef
+    });
+    return () => cleanupAnimations(contexts);
+  }, []);
 
   const cartTotal = cart.reduce((sum, item) => {
     return sum + (item.price * item.quantity);
@@ -35,14 +51,6 @@ const Shop = () => {
 
   const handleCartOpen = () => {
     setCartOpen(true);
-  };
-
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
   };
 
   const handleBookingOpen = () => {
@@ -59,12 +67,8 @@ const Shop = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}
@@ -75,12 +79,21 @@ const Shop = () => {
         onMobileMenuToggle={handleMobileMenuToggle}
       />
 
-      <HeroBanner />
+      <HeroBanner ref={heroRef} />
       <Breadcrumb />
       <SearchSort />
-      <ProductGrid />
-      <Pagination />
-      <Newsletter />
+      <section className="shop-products">
+        <div ref={containerRef} className="shop-products-container">
+          <Sidebar />
+          <ProductGrid />
+        </div>
+      </section>
+      <div ref={paginationRef} className="pagination">
+        <Pagination />
+      </div>
+      <div ref={newsletterRef} className="newsletter">
+        <Newsletter />
+      </div>
 
       <Footer
         onScrollToSection={() => {}}

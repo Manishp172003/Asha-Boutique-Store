@@ -1,4 +1,4 @@
-import { ShoppingBag, User, LogOut, Package, CheckCircle, Menu, X } from 'lucide-react'
+import { ShoppingBag, User, LogOut, Menu, X } from 'lucide-react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useApp } from '../../context/AppContext'
@@ -6,12 +6,8 @@ import { useApp } from '../../context/AppContext'
 const Navigation = ({
   user,
   cart,
-  testLoading,
   onCartOpen,
-  onLoginOpen,
-  onOrderHistoryOpen,
   onLogout,
-  onTestAuth,
   onBookingOpen,
   onScrollToSection,
   trendingRef,
@@ -35,6 +31,28 @@ const Navigation = ({
     }
   };
 
+  const handleCartClick = () => {
+    navigate('/cart');
+  };
+
+  const handleUserIconClick = () => {
+    if (user) {
+      navigate('/profile');
+    } else {
+      navigate('/login');
+    }
+  };
+
+  const handleMobileUserIconClick = () => {
+    if (user) {
+      navigate('/profile');
+      onMobileMenuToggle();
+    } else {
+      navigate('/login');
+      onMobileMenuToggle();
+    }
+  };
+
   return (
     <>
       <nav className="fixed top-0 left-0 right-0 z-50 px-3 py-2 md:px-6 md:py-4 flex items-center justify-between bg-[#F6F2EE]/80 backdrop-blur-md w-full overflow-x-hidden">
@@ -49,7 +67,7 @@ const Navigation = ({
 
           {/* Cart Icon */}
           <button
-            onClick={onCartOpen}
+            onClick={handleCartClick}
             className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
           >
             <ShoppingBag size={24} />
@@ -63,21 +81,12 @@ const Navigation = ({
           {/* User/Login */}
           {user ? (
             <div className="flex items-center gap-2">
-              <span className="text-sm text-[#2B1E1A]">Hi, {user.name}</span>
               <button
-                onClick={onTestAuth}
-                disabled={testLoading}
-                className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors disabled:opacity-50"
-                title="Test Authentication"
-              >
-                <CheckCircle size={20} />
-              </button>
-              <button
-                onClick={onOrderHistoryOpen}
+                onClick={handleUserIconClick}
                 className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
-                title="My Orders"
+                title="My Account"
               >
-                <Package size={20} />
+                <User size={24} />
               </button>
               <button
                 onClick={onLogout}
@@ -89,7 +98,7 @@ const Navigation = ({
             </div>
           ) : (
             <button
-              onClick={onLoginOpen}
+              onClick={handleUserIconClick}
               className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors"
               title="Login"
             >
@@ -109,7 +118,7 @@ const Navigation = ({
         <div className="md:hidden flex items-center gap-2 flex-shrink-0">
           {/* Cart Icon Mobile */}
           <button
-            onClick={onCartOpen}
+            onClick={handleCartClick}
             className="relative text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
           >
             <ShoppingBag size={18} />
@@ -123,15 +132,15 @@ const Navigation = ({
           {/* User/Login Mobile */}
           {user ? (
             <button
-              onClick={onLogout}
+              onClick={handleMobileUserIconClick}
               className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
-              title="Logout"
+              title="My Account"
             >
-              <LogOut size={18} />
+              <User size={18} />
             </button>
           ) : (
             <button
-              onClick={onLoginOpen}
+              onClick={handleMobileUserIconClick}
               className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors flex-shrink-0"
               title="Login"
             >
@@ -151,18 +160,7 @@ const Navigation = ({
       {/* Mobile Menu */}
       {mobileMenuOpen && (
         <div className="fixed inset-0 z-40 bg-[#F6F2EE] pt-16 px-6 md:hidden">
-          <div className="flex flex-col gap-4">
-            {user && (
-              <div className="flex items-center gap-3 pb-4 border-b border-[#E9E3DD]">
-                <div className="w-12 h-12 bg-[#E46A53] rounded-full flex items-center justify-center text-white font-semibold">
-                  {user.name.charAt(0).toUpperCase()}
-                </div>
-                <div>
-                  <p className="font-medium text-[#2B1E1A]">Hi, {user.name}</p>
-                  <p className="text-sm text-[#7A655D]">{user.email}</p>
-                </div>
-              </div>
-            )}
+          <div className="flex flex-col items-center gap-4">
             <Link to="/shop" className="text-lg text-[#2B1E1A]">Shop</Link>
             <button onClick={() => handleScrollToSection(styleEditRef)} className="text-lg text-[#2B1E1A]">Lookbook</button>
             <button onClick={() => handleScrollToSection(atelierRef)} className="text-lg text-[#2B1E1A]">Atelier</button>

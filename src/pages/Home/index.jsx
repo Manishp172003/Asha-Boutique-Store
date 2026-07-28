@@ -20,10 +20,8 @@ import Visit from '../../components/common/Visit'
 
 // Dialog Components
 import BookingDialog from '../../components/forms/BookingDialog'
-import LoginDialog from '../../components/forms/LoginDialog'
 import ProductPreviewDialog from '../../components/product/ProductPreviewDialog'
 import CartDialog from '../../components/cart/CartDialog'
-import OrderHistoryDialog from '../../components/cart/OrderHistoryDialog'
 
 const Home = () => {
   const navigate = useNavigate()
@@ -34,26 +32,18 @@ const Home = () => {
     filter,
     filteredProducts,
     orders,
-    loginLoading,
-    testLoading,
     mobileMenuOpen,
     bookingOpen,
-    loginOpen,
     productPreview,
     cartOpen,
-    orderHistoryOpen,
     testimonials,
     setFilter,
     setCartOpen,
-    setLoginOpen,
-    setOrderHistoryOpen,
     setBookingOpen,
     setProductPreview,
     setMobileMenuOpen,
     handleLogout,
-    handleTestAuth,
     handleBookingSubmit,
-    handleLogin,
     addToCart,
     buyNow,
     updateQuantity,
@@ -110,12 +100,8 @@ const Home = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={() => setCartOpen(true)}
-        onLoginOpen={() => setLoginOpen(true)}
-        onOrderHistoryOpen={() => setOrderHistoryOpen(true)}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={() => setBookingOpen(true)}
         onScrollToSection={scrollToSection}
         trendingRef={trendingRef}
@@ -184,13 +170,6 @@ const Home = () => {
         onSubmit={handleBookingSubmit}
       />
 
-      <LoginDialog
-        open={loginOpen}
-        onOpenChange={setLoginOpen}
-        onSubmit={handleLogin}
-        loading={loginLoading}
-      />
-
       <ProductPreviewDialog
         open={!!productPreview}
         onOpenChange={(open) => !open && setProductPreview(null)}
@@ -210,13 +189,6 @@ const Home = () => {
         onCheckout={() => navigate('/checkout')}
         onScrollToSection={scrollToSection}
         trendingRef={trendingRef}
-      />
-
-      <OrderHistoryDialog
-        open={orderHistoryOpen}
-        onOpenChange={setOrderHistoryOpen}
-        orders={orders}
-        getUserOrders={getUserOrders}
       />
     </div>
   )

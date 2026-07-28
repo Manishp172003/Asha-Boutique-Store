@@ -10,18 +10,10 @@ import OrderDetails from "./components/OrderDetails/OrderDetails";
 import ActionButtons from "./components/ActionButtons/ActionButtons";
 
 const OrderSuccess = () => {
-  const { currentOrder, user, cart, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
+  const { currentOrder, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
 
   const handleCartOpen = () => {
     setCartOpen(true);
-  };
-
-  const handleLoginOpen = () => {
-    setLoginOpen(true);
-  };
-
-  const handleOrderHistoryOpen = () => {
-    setOrderHistoryOpen(true);
   };
 
   const handleBookingOpen = () => {
@@ -38,12 +30,8 @@ const OrderSuccess = () => {
       <Navigation
         user={user}
         cart={cart}
-        testLoading={testLoading}
         onCartOpen={handleCartOpen}
-        onLoginOpen={handleLoginOpen}
-        onOrderHistoryOpen={handleOrderHistoryOpen}
         onLogout={handleLogout}
-        onTestAuth={handleTestAuth}
         onBookingOpen={handleBookingOpen}
         onScrollToSection={() => {}}
         trendingRef={null}

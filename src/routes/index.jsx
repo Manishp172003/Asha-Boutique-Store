@@ -8,6 +8,7 @@ import Product from '../pages/Product'
 import Cart from '../pages/Cart'
 import Wishlist from '../pages/Wishlist'
 import Profile from '../pages/Profile'
+import Addresses from '../pages/Addresses'
 import Orders from '../pages/Orders'
 import OrderDetails from '../pages/OrderDetails'
 import Checkout from '../pages/Checkout'
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
   {
     path: '/profile',
     element: <Layout><Profile /></Layout>,
+  },
+  {
+    path: '/profile/addresses',
+    element: <Layout><Addresses /></Layout>,
   },
   {
     path: '/orders',

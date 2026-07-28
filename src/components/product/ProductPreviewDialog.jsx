@@ -59,11 +59,12 @@ const ProductPreviewDialog = ({ open, onOpenChange, product, onAddToCart, onBuyN
 
               <div className="mt-6 flex flex-col gap-3 sm:flex-row">
                 <Button
+                  variant="primary"
                   onClick={() => {
                     onAddToCart(product)
                     onOpenChange(false)
                   }}
-                  className="flex-1 bg-[#E46A53] hover:bg-[#d55a43] text-white rounded-full py-6"
+                  className="flex-1"
                 >
                   <ShoppingBag className="mr-2" size={18} />
                   Add to Cart

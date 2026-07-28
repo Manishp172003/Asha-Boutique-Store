@@ -304,7 +304,7 @@
         gap:16px;
     }
     
-    .product-image{
+    .product-row .product-image{
         width:64px;
         height:64px;
     }

@@ -1,7 +1,13 @@
 import { Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
+import { useNavigate } from 'react-router-dom'
 
 const Trending = ({ trendingRef, filter, filteredProducts, onFilterChange, onProductPreview }) => {
+  const navigate = useNavigate()
+
+  const handleViewAllProducts = () => {
+    navigate('/shop')
+  }
   return (
     <section ref={trendingRef} className="py-20 px-6 lg:px-12">
       <div className="max-w-7xl mx-auto">
@@ -58,7 +64,10 @@ const Trending = ({ trendingRef, filter, filteredProducts, onFilterChange, onPro
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors font-medium">
+          <button
+            onClick={handleViewAllProducts}
+            className="text-[#2B1E1A] hover:text-[#E46A53] transition-colors font-medium"
+          >
             View all products
           </button>
         </div>

@@ -50,7 +50,7 @@
 .page-btn:hover,
 .page-number:hover{
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 
@@ -59,7 +59,7 @@
 
 .page-number.active{
 
-    background:#C77057;
+    background:#E46A53;
 
     color:white;
 }

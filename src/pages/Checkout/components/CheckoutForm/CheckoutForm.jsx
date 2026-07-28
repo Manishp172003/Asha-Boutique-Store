@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Button } from "@/components/ui/button";
 import "./CheckoutForm.css";
 
 const CheckoutForm = ({ onPlaceOrder }) => {
@@ -175,9 +176,9 @@ const CheckoutForm = ({ onPlaceOrder }) => {
           </div>
         </div>
 
-        <button type="submit" className="place-order-btn">
+        <Button type="submit" variant="primary" className="w-full">
           Place Order
-        </button>
+        </Button>
       </form>
     </section>
   );

@@ -1,5 +1,7 @@
 import "./Cart.css";
+import { useRef, useEffect } from "react";
 import { useApp } from "../../context/AppContext";
+import { animateCartPage, cleanupAnimations } from "../../animations/gsapAnimations";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -11,8 +13,22 @@ import RecommendedProducts from "./components/RecommendedProducts/RecommendedPro
 import Newsletter from "../Shop/components/Newsletter/Newsletter";
 
 const Cart = () => {
-    const { cart, user, testLoading, mobileMenuOpen, setCartOpen, setLoginOpen, setOrderHistoryOpen, setBookingOpen, setMobileMenuOpen, handleLogout, handleTestAuth } = useApp();
-    
+    const { cart, user, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
+
+    const cartItemsRef = useRef(null);
+    const orderSummaryRef = useRef(null);
+    const recommendedRef = useRef(null);
+
+    // Initialize animations
+    useEffect(() => {
+        const contexts = animateCartPage({
+            cartItemsRef,
+            orderSummaryRef,
+            recommendedRef
+        });
+        return () => cleanupAnimations(contexts);
+    }, []);
+
     const cartTotal = cart.reduce((total, item) => {
         return total + (item.price * item.quantity);
     }, 0);
@@ -21,14 +37,6 @@ const Cart = () => {
 
     const handleCartOpen = () => {
         setCartOpen(true);
-    };
-
-    const handleLoginOpen = () => {
-        setLoginOpen(true);
-    };
-
-    const handleOrderHistoryOpen = () => {
-        setOrderHistoryOpen(true);
     };
 
     const handleBookingOpen = () => {
@@ -46,12 +54,8 @@ const Cart = () => {
             <Navigation
                 user={user}
                 cart={cart}
-                testLoading={testLoading}
                 onCartOpen={handleCartOpen}
-                onLoginOpen={handleLoginOpen}
-                onOrderHistoryOpen={handleOrderHistoryOpen}
                 onLogout={handleLogout}
-                onTestAuth={handleTestAuth}
                 onBookingOpen={handleBookingOpen}
                 onScrollToSection={() => {}}
                 trendingRef={null}
@@ -66,13 +70,19 @@ const Cart = () => {
 
             <section className="cart-container">
 
-                <CartTable cartItems={cart} />
+                <div ref={cartItemsRef}>
+                    <CartTable cartItems={cart} />
+                </div>
 
-                <OrderSummary cartTotal={cartTotal} cartCount={cartCount} />
+                <div ref={orderSummaryRef}>
+                    <OrderSummary cartTotal={cartTotal} cartCount={cartCount} />
+                </div>
 
             </section>
 
-            <RecommendedProducts />
+            <div ref={recommendedRef}>
+                <RecommendedProducts />
+            </div>
 
             <Newsletter />
 

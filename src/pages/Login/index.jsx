@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { toast } from 'sonner'
 import { login } from '../../services/authService'
+import { useApp } from '../../context/AppContext'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -12,6 +13,7 @@ import '../../components/auth/auth.css'
 
 const Login = () => {
   const navigate = useNavigate()
+  const { setUser } = useApp()
   const [loading, setLoading] = useState(false)
   const [formData, setFormData] = useState({
     email: '',
@@ -39,7 +41,13 @@ const Login = () => {
     setLoading(true)
 
     try {
-      await login(formData.email, formData.password)
+      const response = await login(formData.email, formData.password)
+      
+      setUser({
+        name: response.user?.name || formData.email.split('@')[0],
+        email: response.user?.email || formData.email
+      })
+      
       toast.success('Welcome back!')
       navigate('/')
     } catch (error) {
@@ -108,8 +116,9 @@ const Login = () => {
 
           <Button
             type="submit"
+            variant="primary"
             disabled={loading}
-            className="w-full bg-[#C77057] hover:bg-[#b66047] text-white rounded-full py-6 disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full"
           >
             {loading ? 'Signing in...' : 'Sign In'}
           </Button>

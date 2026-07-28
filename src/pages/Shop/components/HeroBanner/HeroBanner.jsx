@@ -1,8 +1,9 @@
+import { forwardRef } from "react";
 import "./HeroBanner.css";
 
-const HeroBanner = () => {
+const HeroBanner = forwardRef((props, ref) => {
   return (
-    <section className="shop-hero">
+    <section ref={ref} className="shop-hero">
       <img
         src="/src/assets/shop/shop-hero.png"
         alt="Linen Collection"
@@ -20,6 +21,8 @@ const HeroBanner = () => {
       </div>
     </section>
   );
-};
+});
+
+HeroBanner.displayName = 'HeroBanner';
 
 export default HeroBanner;
