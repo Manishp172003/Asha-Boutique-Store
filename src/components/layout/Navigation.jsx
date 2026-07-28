@@ -37,7 +37,7 @@ const Navigation = ({
 
   const handleUserIconClick = () => {
     if (user) {
-      navigate('/profile');
+      navigate('/dashboard');
     } else {
       navigate('/login');
     }
@@ -45,7 +45,7 @@ const Navigation = ({
 
   const handleMobileUserIconClick = () => {
     if (user) {
-      navigate('/profile');
+      navigate('/dashboard');
       onMobileMenuToggle();
     } else {
       navigate('/login');

@@ -49,7 +49,7 @@ const Login = () => {
       })
       
       toast.success('Welcome back!')
-      navigate('/')
+      navigate('/dashboard')
     } catch (error) {
       toast.error(error.message || 'Login failed. Please check your credentials.')
     } finally {

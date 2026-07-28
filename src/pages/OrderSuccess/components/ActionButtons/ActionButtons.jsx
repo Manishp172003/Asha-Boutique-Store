@@ -28,7 +28,7 @@ const ActionButtons = () => {
         </Button>
 
         <Button
-          variant="primary"
+          variant="outline"
           onClick={handleManageOrder}
         >
           Manage Order

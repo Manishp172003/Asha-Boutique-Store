@@ -3,6 +3,7 @@ import ScrollToTop from '../components/layout/ScrollToTop'
 import Home from '../pages/Home'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
+import Dashboard from '../pages/Dashboard'
 import Shop from '../pages/Shop'
 import Product from '../pages/Product'
 import Cart from '../pages/Cart'
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Layout><Login /></Layout>,
+  },
+  {
+    path: '/dashboard',
+    element: <Layout><Dashboard /></Layout>,
   },
   {
     path: '/shop',

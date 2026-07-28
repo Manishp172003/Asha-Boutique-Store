@@ -228,17 +228,17 @@ const OrderDetails = () => {
             <strong>{formatPrice(order.total)}</strong>
           </div>
 
-        </div>
+          <div className="order-actions">
 
-        <div className="order-actions">
+            <Button variant="primary" onClick={handleContinueShopping}>
+              Continue Shopping
+            </Button>
 
-          <Button variant="primary" onClick={handleContinueShopping}>
-            Continue Shopping
-          </Button>
+            <Button variant="outline" onClick={handleBackToOrders}>
+              Back to Orders
+            </Button>
 
-          <button className="back-to-orders-btn" onClick={handleBackToOrders}>
-            Back to Orders
-          </button>
+          </div>
 
         </div>
 

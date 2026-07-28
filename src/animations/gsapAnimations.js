@@ -8,26 +8,45 @@ gsap.registerPlugin(ScrollTrigger)
 export const animateHeroSection = (heroRef) => {
   const ctx = gsap.context(() => {
     // Hero entrance animation
-    gsap.fromTo('.hero-image', 
-      { opacity: 0, scale: 1.06 },
-      { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }
-    )
-    gsap.fromTo('.hero-headline', 
-      { opacity: 0, y: 26 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power2.out' }
-    )
-    gsap.fromTo('.hero-subheadline', 
-      { opacity: 0, y: 18 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power2.out' }
-    )
-    gsap.fromTo('.hero-cta', 
-      { opacity: 0, y: 18 },
-      { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: 'power2.out' }
-    )
-    gsap.fromTo('.hero-card', 
-      { opacity: 0, y: 24, scale: 0.98 },
-      { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 0.6, ease: 'power2.out' }
-    )
+    const heroImage = document.querySelector('.hero-image');
+    if (heroImage) {
+      gsap.fromTo(heroImage,
+        { opacity: 0, scale: 1.06 },
+        { opacity: 1, scale: 1, duration: 1, ease: 'power2.out' }
+      )
+    }
+
+    const heroHeadline = document.querySelector('.hero-headline');
+    if (heroHeadline) {
+      gsap.fromTo(heroHeadline,
+        { opacity: 0, y: 26 },
+        { opacity: 1, y: 0, duration: 0.8, delay: 0.2, ease: 'power2.out' }
+      )
+    }
+
+    const heroSubheadline = document.querySelector('.hero-subheadline');
+    if (heroSubheadline) {
+      gsap.fromTo(heroSubheadline,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.8, delay: 0.4, ease: 'power2.out' }
+      )
+    }
+
+    const heroCta = document.querySelector('.hero-cta');
+    if (heroCta) {
+      gsap.fromTo(heroCta,
+        { opacity: 0, y: 18 },
+        { opacity: 1, y: 0, duration: 0.8, delay: 0.5, ease: 'power2.out' }
+      )
+    }
+
+    const heroCard = document.querySelector('.hero-card');
+    if (heroCard) {
+      gsap.fromTo(heroCard,
+        { opacity: 0, y: 24, scale: 0.98 },
+        { opacity: 1, y: 0, scale: 1, duration: 0.8, delay: 0.6, ease: 'power2.out' }
+      )
+    }
   }, heroRef)
 
   return ctx
@@ -37,46 +56,55 @@ export const animateHeroSection = (heroRef) => {
 export const animateNewArrivals = (newArrivalsRef) => {
   const ctx = gsap.context(() => {
     // Left image slides in from left
-    gsap.fromTo('.new-arrivals-left',
-      { x: '-60vw' },
-      {
-        x: 0,
-        scrollTrigger: {
-          trigger: newArrivalsRef.current,
-          start: 'top 80%',
-          end: 'top 20%',
-          scrub: 1
+    const leftImage = document.querySelector('.new-arrivals-left');
+    if (leftImage && newArrivalsRef?.current) {
+      gsap.fromTo(leftImage,
+        { x: '-60vw' },
+        {
+          x: 0,
+          scrollTrigger: {
+            trigger: newArrivalsRef.current,
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: 1
+          }
         }
-      }
-    )
-    
+      )
+    }
+
     // Right image slides in from right
-    gsap.fromTo('.new-arrivals-right',
-      { x: '60vw' },
-      {
-        x: 0,
-        scrollTrigger: {
-          trigger: newArrivalsRef.current,
-          start: 'top 80%',
-          end: 'top 20%',
-          scrub: 1
+    const rightImage = document.querySelector('.new-arrivals-right');
+    if (rightImage && newArrivalsRef?.current) {
+      gsap.fromTo(rightImage,
+        { x: '60vw' },
+        {
+          x: 0,
+          scrollTrigger: {
+            trigger: newArrivalsRef.current,
+            start: 'top 80%',
+            end: 'top 20%',
+            scrub: 1
+          }
         }
-      }
-    )
-    
+      )
+    }
+
     // Center badge scales and rotates
-    gsap.fromTo('.new-badge',
-      { scale: 0.2, rotate: -12, opacity: 0 },
-      {
-        scale: 1, rotate: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: newArrivalsRef.current,
-          start: 'top 70%',
-          end: 'top 30%',
-          scrub: 1
+    const badge = document.querySelector('.new-badge');
+    if (badge && newArrivalsRef?.current) {
+      gsap.fromTo(badge,
+        { scale: 0.2, rotate: -12, opacity: 0 },
+        {
+          scale: 1, rotate: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: newArrivalsRef.current,
+            start: 'top 70%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
+      )
+    }
   }, newArrivalsRef)
 
   return ctx
@@ -86,32 +114,38 @@ export const animateNewArrivals = (newArrivalsRef) => {
 export const animateCuratedCollection = (curatedRef) => {
   const ctx = gsap.context(() => {
     // Image slides in from right
-    gsap.fromTo('.curated-image',
-      { x: '60vw', opacity: 0 },
-      {
-        x: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: curatedRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const curatedImage = document.querySelector('.curated-image');
+    if (curatedImage && curatedRef?.current) {
+      gsap.fromTo(curatedImage,
+        { x: '60vw', opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: curatedRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
-    
+      )
+    }
+
     // Text slides in from left
-    gsap.fromTo('.curated-text',
-      { x: '-40vw', opacity: 0 },
-      {
-        x: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: curatedRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const curatedText = document.querySelector('.curated-text');
+    if (curatedText && curatedRef?.current) {
+      gsap.fromTo(curatedText,
+        { x: '-40vw', opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: curatedRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
+      )
+    }
   }, curatedRef)
 
   return ctx
@@ -121,32 +155,38 @@ export const animateCuratedCollection = (curatedRef) => {
 export const animateAtelier = (atelierRef) => {
   const ctx = gsap.context(() => {
     // Image slides in from left
-    gsap.fromTo('.atelier-image',
-      { x: '-70vw' },
-      {
-        x: 0,
-        scrollTrigger: {
-          trigger: atelierRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const atelierImage = document.querySelector('.atelier-image');
+    if (atelierImage && atelierRef?.current) {
+      gsap.fromTo(atelierImage,
+        { x: '-70vw' },
+        {
+          x: 0,
+          scrollTrigger: {
+            trigger: atelierRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
-    
+      )
+    }
+
     // Text slides in from right
-    gsap.fromTo('.atelier-text',
-      { x: '50vw', opacity: 0 },
-      {
-        x: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: atelierRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const atelierText = document.querySelector('.atelier-text');
+    if (atelierText && atelierRef?.current) {
+      gsap.fromTo(atelierText,
+        { x: '50vw', opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: atelierRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
+      )
+    }
   }, atelierRef)
 
   return ctx
@@ -156,19 +196,22 @@ export const animateAtelier = (atelierRef) => {
 export const animateTrending = (trendingRef) => {
   const ctx = gsap.context(() => {
     // Product cards fade and scale up with stagger
-    gsap.fromTo('.trending-card',
-      { y: 40, opacity: 0, scale: 0.98 },
-      {
-        y: 0, opacity: 1, scale: 1,
-        stagger: 0.08,
-        scrollTrigger: {
-          trigger: trendingRef.current,
-          start: 'top 85%',
-          end: 'top 40%',
-          scrub: 1
+    const trendingCards = document.querySelectorAll('.trending-card');
+    if (trendingCards.length > 0 && trendingRef?.current) {
+      gsap.fromTo(trendingCards,
+        { y: 40, opacity: 0, scale: 0.98 },
+        {
+          y: 0, opacity: 1, scale: 1,
+          stagger: 0.08,
+          scrollTrigger: {
+            trigger: trendingRef.current,
+            start: 'top 85%',
+            end: 'top 40%',
+            scrub: 1
+          }
         }
-      }
-    )
+      )
+    }
   }, trendingRef)
 
   return ctx
@@ -178,32 +221,38 @@ export const animateTrending = (trendingRef) => {
 export const animateStyleEdit = (styleEditRef) => {
   const ctx = gsap.context(() => {
     // Image slides in from right
-    gsap.fromTo('.style-image',
-      { x: '60vw', opacity: 0 },
-      {
-        x: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: styleEditRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const styleImage = document.querySelector('.style-image');
+    if (styleImage && styleEditRef?.current) {
+      gsap.fromTo(styleImage,
+        { x: '60vw', opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: styleEditRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
-    
+      )
+    }
+
     // Text slides in from left
-    gsap.fromTo('.style-text',
-      { x: '-40vw', opacity: 0 },
-      {
-        x: 0, opacity: 1,
-        scrollTrigger: {
-          trigger: styleEditRef.current,
-          start: 'top 80%',
-          end: 'top 30%',
-          scrub: 1
+    const styleText = document.querySelector('.style-text');
+    if (styleText && styleEditRef?.current) {
+      gsap.fromTo(styleText,
+        { x: '-40vw', opacity: 0 },
+        {
+          x: 0, opacity: 1,
+          scrollTrigger: {
+            trigger: styleEditRef.current,
+            start: 'top 80%',
+            end: 'top 30%',
+            scrub: 1
+          }
         }
-      }
-    )
+      )
+    }
   }, styleEditRef)
 
   return ctx
@@ -254,22 +303,25 @@ export const cleanupAnimations = (contexts) => {
 // Fade in animation for elements
 export const fadeIn = (selector, ref, options = {}) => {
   const ctx = gsap.context(() => {
-    gsap.fromTo(selector,
-      { opacity: 0, y: options.y || 20 },
-      {
-        opacity: 1,
-        y: 0,
-        duration: options.duration || 0.8,
-        delay: options.delay || 0,
-        ease: options.ease || 'power2.out',
-        scrollTrigger: options.scrollTrigger ? {
-          trigger: ref.current,
-          start: options.scrollTrigger.start || 'top 80%',
-          end: options.scrollTrigger.end || 'top 40%',
-          scrub: options.scrollTrigger.scrub || 1
-        } : undefined
-      }
-    )
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (elements.length > 0 && ref?.current) {
+      gsap.fromTo(elements,
+        { opacity: 0, y: options.y || 20 },
+        {
+          opacity: 1,
+          y: 0,
+          duration: options.duration || 0.8,
+          delay: options.delay || 0,
+          ease: options.ease || 'power2.out',
+          scrollTrigger: options.scrollTrigger ? {
+            trigger: ref.current,
+            start: options.scrollTrigger.start || 'top 80%',
+            end: options.scrollTrigger.end || 'top 40%',
+            scrub: options.scrollTrigger.scrub || 1
+          } : undefined
+        }
+      )
+    }
   }, ref)
   return ctx
 }
@@ -277,23 +329,26 @@ export const fadeIn = (selector, ref, options = {}) => {
 // Stagger animation for lists/cards
 export const staggerFadeIn = (selector, ref, options = {}) => {
   const ctx = gsap.context(() => {
-    gsap.fromTo(selector,
-      { opacity: 0, y: options.y || 30, scale: options.scale || 0.98 },
-      {
-        opacity: 1,
-        y: 0,
-        scale: 1,
-        stagger: options.stagger || 0.1,
-        duration: options.duration || 0.7,
-        ease: options.ease || 'power2.out',
-        scrollTrigger: {
-          trigger: ref.current,
-          start: options.start || 'top 85%',
-          end: options.end || 'top 40%',
-          scrub: options.scrub || 1
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (elements.length > 0 && ref?.current) {
+      gsap.fromTo(elements,
+        { opacity: 0, y: options.y || 30, scale: options.scale || 0.98 },
+        {
+          opacity: 1,
+          y: 0,
+          scale: 1,
+          stagger: options.stagger || 0.1,
+          duration: options.duration || 0.7,
+          ease: options.ease || 'power2.out',
+          scrollTrigger: {
+            trigger: ref.current,
+            start: options.start || 'top 85%',
+            end: options.end || 'top 40%',
+            scrub: options.scrub || 1
+          }
         }
-      }
-    )
+      )
+    }
   }, ref)
   return ctx
 }
@@ -301,19 +356,22 @@ export const staggerFadeIn = (selector, ref, options = {}) => {
 // Slide from left animation
 export const slideFromLeft = (selector, ref, options = {}) => {
   const ctx = gsap.context(() => {
-    gsap.fromTo(selector,
-      { x: options.x || '-40vw', opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        scrollTrigger: {
-          trigger: ref.current,
-          start: options.start || 'top 80%',
-          end: options.end || 'top 30%',
-          scrub: options.scrub || 1
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (elements.length > 0 && ref?.current) {
+      gsap.fromTo(elements,
+        { x: options.x || '-40vw', opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          scrollTrigger: {
+            trigger: ref.current,
+            start: options.start || 'top 80%',
+            end: options.end || 'top 30%',
+            scrub: options.scrub || 1
+          }
         }
-      }
-    )
+      )
+    }
   }, ref)
   return ctx
 }
@@ -321,19 +379,22 @@ export const slideFromLeft = (selector, ref, options = {}) => {
 // Slide from right animation
 export const slideFromRight = (selector, ref, options = {}) => {
   const ctx = gsap.context(() => {
-    gsap.fromTo(selector,
-      { x: options.x || '40vw', opacity: 0 },
-      {
-        x: 0,
-        opacity: 1,
-        scrollTrigger: {
-          trigger: ref.current,
-          start: options.start || 'top 80%',
-          end: options.end || 'top 30%',
-          scrub: options.scrub || 1
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (elements.length > 0 && ref?.current) {
+      gsap.fromTo(elements,
+        { x: options.x || '40vw', opacity: 0 },
+        {
+          x: 0,
+          opacity: 1,
+          scrollTrigger: {
+            trigger: ref.current,
+            start: options.start || 'top 80%',
+            end: options.end || 'top 30%',
+            scrub: options.scrub || 1
+          }
         }
-      }
-    )
+      )
+    }
   }, ref)
   return ctx
 }
@@ -341,21 +402,24 @@ export const slideFromRight = (selector, ref, options = {}) => {
 // Scale animation
 export const scaleIn = (selector, ref, options = {}) => {
   const ctx = gsap.context(() => {
-    gsap.fromTo(selector,
-      { scale: options.fromScale || 0.8, opacity: 0 },
-      {
-        scale: 1,
-        opacity: 1,
-        duration: options.duration || 0.6,
-        ease: options.ease || 'power2.out',
-        scrollTrigger: {
-          trigger: ref.current,
-          start: options.start || 'top 80%',
-          end: options.end || 'top 40%',
-          scrub: options.scrub || 1
+    const elements = typeof selector === 'string' ? document.querySelectorAll(selector) : selector;
+    if (elements.length > 0 && ref?.current) {
+      gsap.fromTo(elements,
+        { scale: options.fromScale || 0.8, opacity: 0 },
+        {
+          scale: 1,
+          opacity: 1,
+          duration: options.duration || 0.6,
+          ease: options.ease || 'power2.out',
+          scrollTrigger: {
+            trigger: ref.current,
+            start: options.start || 'top 80%',
+            end: options.end || 'top 40%',
+            scrub: options.scrub || 1
+          }
         }
-      }
-    )
+      )
+    }
   }, ref)
   return ctx
 }
