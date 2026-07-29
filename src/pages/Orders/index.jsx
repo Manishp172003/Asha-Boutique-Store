@@ -1,10 +1,12 @@
 import "./Orders.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Package } from "lucide-react";
 import { animateOrdersPage, cleanupAnimations } from "../../animations/gsapAnimations";
 import { Button } from "@/components/ui/button";
+import { OrdersSkeleton } from "../../components/Skeleton";
+import { EmptyState } from "../../components/EmptyState";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -13,30 +15,11 @@ import OrdersHeader from "./components/OrdersHeader/OrdersHeader";
 import OrdersList from "./components/OrdersList/OrdersList";
 
 const Orders = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const { orders, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
   const navigate = useNavigate();
 
   const ordersRef = useRef(null);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  // Initialize animations
-  useEffect(() => {
-    if (!orders || orders.length === 0) return;
-    const contexts = animateOrdersPage({ ordersRef });
-    return () => cleanupAnimations(contexts);
-  }, [orders]);
-
-  const sortedOrders = [...orders].sort((a, b) => {
-    return new Date(b.createdAt) - new Date(a.createdAt);
-  });
-
-  const isEmpty = orders.length === 0;
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -49,6 +32,35 @@ const Orders = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && orders && orders.length > 0) {
+      const contexts = animateOrdersPage({ ordersRef });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, orders]);
+
+  const sortedOrders = [...orders].sort((a, b) => {
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
+  const isEmpty = orders.length === 0;
 
   return (
     <div className="orders-page">
@@ -71,16 +83,13 @@ const Orders = () => {
       <OrdersHeader />
 
       {isEmpty ? (
-        <div className="orders-empty-state">
-          <div className="empty-icon">
-            <ShoppingBag size={64} color="#C77057" />
-          </div>
-          <h2>No Orders Yet</h2>
-          <p>You haven't placed any orders yet. Start shopping to see your orders here.</p>
-          <Button variant="primary" onClick={() => navigate('/shop')}>
-            Continue Shopping
-          </Button>
-        </div>
+        <EmptyState
+          icon={Package}
+          title="No Orders Yet"
+          description="Once you place your first order, it will appear here."
+          buttonText="Shop Now"
+          buttonRoute="/shop"
+        />
       ) : (
         <div ref={ordersRef}>
           <OrdersList orders={sortedOrders} />

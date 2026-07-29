@@ -1,10 +1,12 @@
 import "./Wishlist.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import { useApp } from "../../context/AppContext";
 import { animateWishlistPage, cleanupAnimations } from "../../animations/gsapAnimations";
 import { Button } from "@/components/ui/button";
+import { ProductCardSkeleton } from "../../components/Skeleton";
+import { EmptyState } from "../../components/EmptyState";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -16,26 +18,11 @@ import EditorialSection from "./components/EditorialSection/EditorialSection";
 import Newsletter from "../Shop/components/Newsletter/Newsletter";
 
 const Wishlist = () => {
+  const [isLoading, setIsLoading] = useState(true);
   const { wishlist, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
   const navigate = useNavigate();
 
   const wishlistRef = useRef(null);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  // Initialize animations
-  useEffect(() => {
-    if (!wishlist || wishlist.length === 0) return;
-    const contexts = animateWishlistPage({ wishlistRef });
-    return () => cleanupAnimations(contexts);
-  }, [wishlist]);
-
-  const isEmpty = wishlist.length === 0;
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -48,6 +35,31 @@ const Wishlist = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && wishlist && wishlist.length > 0) {
+      const contexts = animateWishlistPage({ wishlistRef });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, wishlist]);
+
+  const isEmpty = wishlist.length === 0;
 
   return (
     <div className="wishlist-page">
@@ -70,16 +82,13 @@ const Wishlist = () => {
       <WishlistHeader count={wishlist.length} />
 
       {isEmpty ? (
-        <div className="wishlist-empty-state">
-          <div className="empty-heart">
-            <Heart size={64} color="#D57B5A" />
-          </div>
-          <h2>Your Wishlist is Empty</h2>
-          <p>Looks like you haven't saved any beautiful pieces yet.</p>
-          <Button variant="primary" onClick={() => navigate('/shop')}>
-            Continue Shopping
-          </Button>
-        </div>
+        <EmptyState
+          icon={Heart}
+          title="Your Wishlist is Waiting"
+          description="Save your favorite boutique pieces and revisit them anytime."
+          buttonText="Continue Shopping"
+          buttonRoute="/shop"
+        />
       ) : (
         <>
           <div ref={wishlistRef}>

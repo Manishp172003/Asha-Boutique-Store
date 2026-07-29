@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./ProductGallery.css";
 
 const ProductGallery = ({ product }) => {
@@ -26,11 +27,15 @@ const ProductGallery = ({ product }) => {
               selectedImage === image ? "active" : ""
             }`}
             onClick={() => setSelectedImage(image)}
+            role="button"
+            tabIndex={0}
+            aria-label={`View image ${index + 1}`}
           >
 
-            <img
+            <LazyImage
               src={image}
               alt={`Thumbnail ${index + 1}`}
+              loading="lazy"
             />
 
           </div>
@@ -41,9 +46,10 @@ const ProductGallery = ({ product }) => {
 
       <div className="main-image">
 
-        <img
+        <LazyImage
           src={selectedImage}
           alt={product.name}
+          loading="eager"
         />
 
       </div>

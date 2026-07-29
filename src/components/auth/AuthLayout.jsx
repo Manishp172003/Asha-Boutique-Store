@@ -1,12 +1,14 @@
+import LazyImage from '../common/LazyImage';
+
 const AuthLayout = ({ children, imageSrc = "/images/curated_collection.jpg", imageAlt = "Asha Boutique" }) => {
   return (
     <section className="auth-page">
       {/* Left Side */}
       <div className="auth-left">
-        <img
+        <LazyImage
           src={imageSrc}
           alt={imageAlt}
-          className="auth-image"
+          loading="eager"
         />
       </div>
 

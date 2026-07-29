@@ -1,8 +1,11 @@
 import "./Shop.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useApp } from "../../context/AppContext";
 import { useNavigate } from "react-router-dom";
 import { animateShopPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { ProductCardSkeleton } from "../../components/Skeleton";
+import { EmptyState } from "../../components/EmptyState";
+import { Search } from "lucide-react";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -17,6 +20,8 @@ import Newsletter from "./components/Newsletter/Newsletter";
 
 const Shop = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [searchQuery, setSearchQuery] = useState('');
   const {
     user,
     cart,
@@ -25,6 +30,7 @@ const Shop = () => {
     setBookingOpen,
     setMobileMenuOpen,
     handleLogout,
+    filteredProducts,
   } = useApp();
 
   const heroRef = useRef(null);
@@ -32,22 +38,6 @@ const Shop = () => {
   const productGridRef = useRef(null);
   const paginationRef = useRef(null);
   const newsletterRef = useRef(null);
-
-  // Initialize animations
-  useEffect(() => {
-    const contexts = animateShopPage({
-      heroRef,
-      containerRef,
-      productGridRef,
-      paginationRef,
-      newsletterRef
-    });
-    return () => cleanupAnimations(contexts);
-  }, []);
-
-  const cartTotal = cart.reduce((sum, item) => {
-    return sum + (item.price * item.quantity);
-  }, 0);
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -60,6 +50,32 @@ const Shop = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading) {
+      const contexts = animateShopPage({
+        heroRef,
+        containerRef,
+        productGridRef,
+        paginationRef,
+        newsletterRef
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading]);
+
+  const cartTotal = cart.reduce((sum, item) => {
+    return sum + (item.price * item.quantity);
+  }, 0);
 
   return (
     <div className="shop-page">
@@ -85,7 +101,23 @@ const Shop = () => {
       <section className="shop-products">
         <div ref={containerRef} className="shop-products-container">
           <Sidebar />
-          <ProductGrid />
+          {isLoading ? (
+            <div className="product-grid">
+              {[...Array(8)].map((_, index) => (
+                <ProductCardSkeleton key={index} />
+              ))}
+            </div>
+          ) : filteredProducts && filteredProducts.length === 0 ? (
+            <EmptyState
+              icon={Search}
+              title="No Products Found"
+              description="Try another keyword or browse all collections."
+              buttonText="View All Products"
+              buttonRoute="/shop"
+            />
+          ) : (
+            <ProductGrid />
+          )}
         </div>
       </section>
       <div ref={paginationRef} className="pagination">

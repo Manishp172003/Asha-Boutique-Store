@@ -1,6 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Heart } from "lucide-react";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./WishlistPreview.css";
 
 const WishlistPreview = ({ items }) => {
@@ -39,7 +40,7 @@ const WishlistPreview = ({ items }) => {
         {items.map((item) => (
           <div key={item.id} className="wishlist-item">
             {item.image ? (
-              <img src={item.image} alt={item.name} className="item-image" />
+              <LazyImage src={item.image} alt={item.name} loading="lazy" />
             ) : (
               <div className="item-image-placeholder"></div>
             )}

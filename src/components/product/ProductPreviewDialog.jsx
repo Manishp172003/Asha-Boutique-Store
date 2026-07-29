@@ -1,6 +1,7 @@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { ShoppingBag } from 'lucide-react'
+import LazyImage from '../common/LazyImage'
 
 const ProductPreviewDialog = ({ open, onOpenChange, product, onAddToCart, onBuyNow, trendingRef }) => {
   return (
@@ -9,10 +10,10 @@ const ProductPreviewDialog = ({ open, onOpenChange, product, onAddToCart, onBuyN
         {product && (
           <div className="grid gap-6 md:grid-cols-[0.95fr_1.05fr]">
             <div className="overflow-hidden rounded-[18px] bg-[#E9E3DD]">
-              <img
+              <LazyImage
                 src={product.image}
                 alt={product.name}
-                className="h-[360px] w-full object-cover md:h-full md:min-h-[520px]"
+                loading="eager"
               />
             </div>
 

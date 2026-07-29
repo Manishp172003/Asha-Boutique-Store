@@ -1,5 +1,7 @@
 import { Minus, Plus, X } from "lucide-react";
+import { toast } from 'sonner';
 import { useApp } from "../../../../context/AppContext";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./CartItem.css";
 
 const CartItem = ({ item }) => {
@@ -11,6 +13,7 @@ const CartItem = ({ item }) => {
 
   const handleRemove = () => {
     removeFromCart(item.id);
+    toast.success('Product removed from cart');
   };
 
   const subtotal = item.price * item.quantity;
@@ -21,9 +24,10 @@ const CartItem = ({ item }) => {
 
       <div className="cart-product">
 
-        <img
+        <LazyImage
           src={item.image}
           alt={item.name}
+          loading="lazy"
         />
 
         <div className="cart-details">

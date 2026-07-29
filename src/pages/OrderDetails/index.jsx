@@ -1,22 +1,37 @@
 import "./OrderDetails.css";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import StatusBadge from "../Orders/components/StatusBadge/StatusBadge";
 import { animateOrderDetailsPage, cleanupAnimations } from "../../animations/gsapAnimations";
 import { Button } from "@/components/ui/button";
+import { OrderDetailsSkeleton } from "../../components/Skeleton";
+import LazyImage from "../../components/common/LazyImage";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
 
 const OrderDetails = () => {
   const { id } = useParams();
+  const [isLoading, setIsLoading] = useState(true);
   const navigate = useNavigate();
   const { orders, user, cart, mobileMenuOpen, setCartOpen, setBookingOpen, setMobileMenuOpen, handleLogout } = useApp();
 
   const breadcrumbRef = useRef(null);
   const detailsRef = useRef(null);
   const timelineRef = useRef(null);
+
+  const handleCartOpen = () => {
+    setCartOpen(true);
+  };
+
+  const handleBookingOpen = () => {
+    setBookingOpen(true);
+  };
+
+  const handleMobileMenuToggle = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
 
   // Redirect to login if not authenticated
   useEffect(() => {
@@ -33,16 +48,25 @@ const OrderDetails = () => {
     }
   }, [order, navigate]);
 
-  // Initialize animations
+  // Simulate API loading
   useEffect(() => {
-    if (!order) return;
-    const contexts = animateOrderDetailsPage({
-      breadcrumbRef,
-      detailsRef,
-      timelineRef
-    });
-    return () => cleanupAnimations(contexts);
-  }, [order]);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && order) {
+      const contexts = animateOrderDetailsPage({
+        breadcrumbRef,
+        detailsRef,
+        timelineRef
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, order]);
 
   if (!order) {
     return null;
@@ -77,18 +101,6 @@ const OrderDetails = () => {
 
   const handleBackToOrders = () => {
     navigate('/orders');
-  };
-
-  const handleCartOpen = () => {
-    setCartOpen(true);
-  };
-
-  const handleBookingOpen = () => {
-    setBookingOpen(true);
-  };
-
-  const handleMobileMenuToggle = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   return (
@@ -187,7 +199,7 @@ const OrderDetails = () => {
 
                 <div className="product-image">
                   {item.image ? (
-                    <img src={item.image} alt={item.name} />
+                    <LazyImage src={item.image} alt={item.name} loading="lazy" />
                   ) : (
                     <div className="product-image-placeholder"></div>
                   )}

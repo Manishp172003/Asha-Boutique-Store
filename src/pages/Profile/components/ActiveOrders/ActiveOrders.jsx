@@ -1,5 +1,6 @@
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../../context/AppContext";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./ActiveOrders.css";
 
 const ActiveOrders = () => {
@@ -85,9 +86,10 @@ const ActiveOrders = () => {
 
         <div className="order-image">
           {firstItem?.image ? (
-            <img
+            <LazyImage
               src={firstItem.image}
               alt={firstItem.name}
+              loading="lazy"
             />
           ) : (
             <div className="placeholder-image"></div>

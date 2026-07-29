@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { MapPin, Edit2, Trash2, Star } from 'lucide-react';
+import { toast } from 'sonner';
 import { useApp } from '../../../../context/AppContext';
 import EditAddressModal from '../EditAddressModal/EditAddressModal';
 import DeleteConfirmationModal from '../DeleteConfirmationModal/DeleteConfirmationModal';
@@ -13,6 +14,7 @@ const AddressCard = ({ address }) => {
   const handleSetDefault = () => {
     if (!address.isDefault) {
       setDefaultAddress(address.id);
+      toast.success('Default address updated');
     }
   };
 

@@ -1,7 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { animateAddressesPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { AddressesSkeleton } from "../../components/Skeleton";
+import { EmptyState } from "../../components/EmptyState";
+import { MapPin } from "lucide-react";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -13,8 +16,10 @@ import "./Addresses.css";
 
 const Addresses = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     user,
+    addresses,
     cart,
     mobileMenuOpen,
     setCartOpen,
@@ -26,23 +31,6 @@ const Addresses = () => {
   const sidebarRef = useRef(null);
   const headerRef = useRef(null);
   const addressListRef = useRef(null);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  // Initialize animations
-  useEffect(() => {
-    const contexts = animateAddressesPage({
-      sidebarRef,
-      headerRef,
-      addressListRef
-    });
-    return () => cleanupAnimations(contexts);
-  }, []);
 
   // Dummy refs (Addresses page doesn't scroll to sections)
   const heroRef = useRef(null);
@@ -60,6 +48,33 @@ const Addresses = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && user) {
+      const contexts = animateAddressesPage({
+        sidebarRef,
+        headerRef,
+        addressListRef
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, user]);
 
   const handleSidebarAction = (action) => {
     switch (action) {
@@ -112,9 +127,21 @@ const Addresses = () => {
             <div ref={headerRef} className="address-header">
               <AddressHeader />
             </div>
-            <div ref={addressListRef}>
-              <AddressList />
-            </div>
+            {addresses && addresses.length === 0 ? (
+              <EmptyState
+                icon={MapPin}
+                title="No Saved Addresses"
+                description="Save an address for faster checkout."
+                buttonText="Add Address"
+                onButtonClick={() => {
+                  // Trigger add address modal (implementation depends on existing modal)
+                }}
+              />
+            ) : (
+              <div ref={addressListRef}>
+                <AddressList />
+              </div>
+            )}
           </div>
         </div>
       </main>

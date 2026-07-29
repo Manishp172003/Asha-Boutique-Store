@@ -3,6 +3,7 @@ import "./EditorialSection.css";
 import editorial from "../../../../assets/wishlist/editorial.png";
 
 import { ShieldCheck, Sparkles } from "lucide-react";
+import LazyImage from "../../../../components/common/LazyImage";
 
 const EditorialSection = () => {
   return (
@@ -10,9 +11,10 @@ const EditorialSection = () => {
 
       <div className="editorial-left">
 
-        <img
+        <LazyImage
           src={editorial}
           alt="Editorial"
+          loading="lazy"
         />
 
         <div className="editorial-overlay">

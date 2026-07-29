@@ -3,6 +3,7 @@ import { Heart, Eye, ShoppingBag, Star } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../../../context/AppContext";
 import { Button } from "@/components/ui/button";
+import LazyImage from "../../../../components/common/LazyImage";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
@@ -30,14 +31,15 @@ const ProductCard = ({ product }) => {
   const wishlisted = isWishlisted(product.id);
 
   return (
-    <div className="product-card" onClick={handleCardClick}>
+    <div className="product-card" onClick={handleCardClick} role="button" tabIndex={0} aria-label={`View ${product.name} details`}>
 
       <div className="product-image-wrapper">
 
-        <img
+        <LazyImage
           src={product.image}
           alt={product.name}
           className="product-image"
+          loading="lazy"
         />
 
         {product.isNew && (

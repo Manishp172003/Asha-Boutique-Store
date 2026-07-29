@@ -1,5 +1,6 @@
 import "./OrderDetails.css";
 import { Package } from "lucide-react";
+import LazyImage from "../../../../components/common/LazyImage";
 
 const OrderDetails = ({ order }) => {
   const hasOrderData = order && order.items && order.items.length > 0;
@@ -67,7 +68,7 @@ const OrderDetails = ({ order }) => {
               {order.items.map((item) => (
                 <div key={item.id} className="summary-item">
                   {item.image ? (
-                    <img src={item.image} alt={item.name} />
+                    <LazyImage src={item.image} alt={item.name} loading="lazy" />
                   ) : (
                     <div className="placeholder-image">
                       <Package size={32} color="#9B8B84" strokeWidth={1.5} />

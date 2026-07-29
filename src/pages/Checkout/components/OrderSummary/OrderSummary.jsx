@@ -1,5 +1,6 @@
 import { useApp } from "../../../../context/AppContext";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./OrderSummary.css";
 
 const OrderSummary = () => {
@@ -26,7 +27,7 @@ const OrderSummary = () => {
           return (
             <div key={item.id} className="order-item">
               <div className="item-info">
-                <img src={item.image} alt={item.name} />
+                <LazyImage src={item.image} alt={item.name} loading="lazy" />
                 <div className="item-details">
                   <h3>{item.name}</h3>
                   <p>Qty: {item.quantity}</p>

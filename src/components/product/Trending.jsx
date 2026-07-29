@@ -1,6 +1,7 @@
 import { Eye } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { useNavigate } from 'react-router-dom'
+import LazyImage from '../common/LazyImage'
 
 const Trending = ({ trendingRef, filter, filteredProducts, onFilterChange, onProductPreview }) => {
   const navigate = useNavigate()
@@ -38,12 +39,15 @@ const Trending = ({ trendingRef, filter, filteredProducts, onFilterChange, onPro
               key={product.id} 
               className="trending-card group cursor-pointer"
               onClick={() => onProductPreview(product)}
+              role="button"
+              tabIndex={0}
+              aria-label={`View ${product.name} details`}
             >
               <div className="relative aspect-[3/4] rounded-[22px] overflow-hidden mb-4 bg-[#E9E3DD]">
-                <img 
+                <LazyImage 
                   src={product.image} 
                   alt={product.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  loading="lazy"
                 />
                 <Button
                   onClick={(event) => {

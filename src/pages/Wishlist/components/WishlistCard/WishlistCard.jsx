@@ -1,5 +1,6 @@
 import { Heart } from "lucide-react";
 import { useApp } from "../../../../context/AppContext";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./WishlistCard.css";
 
 const WishlistCard = ({ product }) => {
@@ -15,12 +16,17 @@ const WishlistCard = ({ product }) => {
 
       <div className="wishlist-image">
 
-        <img
+        <LazyImage
           src={product.image}
           alt={product.name}
+          loading="lazy"
         />
 
-        <button className="wishlist-heart" onClick={handleRemove}>
+        <button 
+          className="wishlist-heart" 
+          onClick={handleRemove}
+          aria-label="Remove from wishlist"
+        >
 
           <Heart
             size={18}

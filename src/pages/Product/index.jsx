@@ -1,8 +1,9 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import "./Product.css";
 import { useApp } from "../../context/AppContext";
 import { animateProductPage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { ProductDetailsSkeleton } from "../../components/Skeleton";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -19,6 +20,7 @@ import { products } from "../../data/products";
 const Product = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     user,
     cart,
@@ -35,25 +37,6 @@ const Product = () => {
   const relatedRef = useRef(null);
   const recentlyRef = useRef(null);
 
-  // Initialize animations
-  useEffect(() => {
-    const contexts = animateProductPage({
-      galleryRef,
-      infoRef,
-      tabsRef,
-      relatedRef,
-      recentlyRef
-    });
-    return () => cleanupAnimations(contexts);
-  }, []);
-
-  const product = products.find((p) => p.id === parseInt(id));
-
-  if (!product) {
-    navigate("/shop");
-    return null;
-  }
-
   const handleCartOpen = () => {
     setCartOpen(true);
   };
@@ -65,6 +48,35 @@ const Product = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading) {
+      const contexts = animateProductPage({
+        galleryRef,
+        infoRef,
+        tabsRef,
+        relatedRef,
+        recentlyRef
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading]);
+
+  const product = products.find((p) => p.id === parseInt(id));
+
+  if (!product) {
+    navigate("/shop");
+    return null;
+  }
 
   return (
     <div className="product-page">

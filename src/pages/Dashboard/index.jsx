@@ -1,8 +1,10 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { Button } from "@/components/ui/button";
-import { Package, Heart, MapPin, ShoppingBag, ArrowRight } from "lucide-react";
+import { Package, Heart, MapPin, ShoppingBag, ArrowRight, Sparkles } from "lucide-react";
+import { DashboardSkeleton } from "../../components/Skeleton";
+import { EmptyState } from "../../components/EmptyState";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -18,6 +20,7 @@ import "./Dashboard.css";
 
 const Dashboard = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     user,
     orders,
@@ -39,28 +42,6 @@ const Dashboard = () => {
   const wishlistRef = useRef(null);
   const quickActionsRef = useRef(null);
   const bannerRef = useRef(null);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  // Initialize animations
-  useEffect(() => {
-    const contexts = animateDashboardPage({
-      sidebarRef,
-      contentRef,
-      welcomeRef,
-      statsRef,
-      recentOrderRef,
-      wishlistRef,
-      quickActionsRef,
-      bannerRef,
-    });
-    return () => cleanupAnimations(contexts);
-  }, []);
 
   const handleCartOpen = () => {
     setCartOpen(true);
@@ -101,6 +82,38 @@ const Dashboard = () => {
     }
   };
 
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && user) {
+      const contexts = animateDashboardPage({
+        sidebarRef,
+        contentRef,
+        welcomeRef,
+        statsRef,
+        recentOrderRef,
+        wishlistRef,
+        quickActionsRef,
+        bannerRef,
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, user]);
+
   // Get user first name
   const firstName = user?.name?.split(' ')[0] || 'Welcome';
 
@@ -111,6 +124,37 @@ const Dashboard = () => {
 
   // Get first 3 wishlist items
   const wishlistPreview = wishlist?.slice(0, 3) || [];
+
+  if (isLoading) {
+    return (
+      <>
+        <Navigation
+          user={user}
+          cart={cart}
+          onCartOpen={handleCartOpen}
+          onLogout={handleLogout}
+          onBookingOpen={handleBookingOpen}
+          onScrollToSection={() => {}}
+          trendingRef={null}
+          styleEditRef={null}
+          atelierRef={null}
+          heroRef={null}
+          mobileMenuOpen={mobileMenuOpen}
+          onMobileMenuToggle={handleMobileMenuToggle}
+        />
+        <main className="dashboard-page">
+          <DashboardSkeleton />
+        </main>
+        <Footer
+          onScrollToSection={() => {}}
+          trendingRef={null}
+          styleEditRef={null}
+          atelierRef={null}
+          heroRef={null}
+        />
+      </>
+    );
+  }
 
   return (
     <>
@@ -150,7 +194,17 @@ const Dashboard = () => {
             </div>
 
             <div ref={recentOrderRef}>
-              <RecentOrder order={latestOrder} />
+              {latestOrder ? (
+                <RecentOrder order={latestOrder} />
+              ) : (
+                <EmptyState
+                  icon={Sparkles}
+                  title="No Recent Orders"
+                  description="Your recent boutique purchases will appear here."
+                  buttonText="Shop Now"
+                  buttonRoute="/shop"
+                />
+              )}
             </div>
 
             <div ref={wishlistRef}>

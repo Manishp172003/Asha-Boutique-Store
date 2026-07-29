@@ -1,5 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom'
 import ScrollToTop from '../components/layout/ScrollToTop'
+import BackToTop from '../components/layout/BackToTop'
+import PageTransition from '../components/layout/PageTransition'
 import Home from '../pages/Home'
 import Register from '../pages/Register'
 import Login from '../pages/Login'
@@ -20,7 +22,10 @@ const Layout = ({ children }) => {
   return (
     <>
       <ScrollToTop />
-      {children}
+      <PageTransition>
+        {children}
+      </PageTransition>
+      <BackToTop />
     </>
   )
 }

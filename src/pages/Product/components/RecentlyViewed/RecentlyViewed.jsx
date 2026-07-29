@@ -1,4 +1,5 @@
 import { useNavigate } from "react-router-dom";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./RecentlyViewed.css";
 
 import { products } from "../../../../data/products";
@@ -27,10 +28,13 @@ const RecentlyViewed = ({ currentProductId }) => {
             key={product.id}
             className="recent-card"
             onClick={() => navigate(`/product/${product.id}`)}
+            role="button"
+            tabIndex={0}
+            aria-label={`View ${product.name} details`}
           >
 
             <div className="recent-image">
-              <img src={product.image} alt={product.name} />
+              <LazyImage src={product.image} alt={product.name} loading="lazy" />
             </div>
 
             <div className="recent-content">

@@ -1,5 +1,6 @@
 import { AlertTriangle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
+import { toast } from 'sonner';
 import { useApp } from '../../../../context/AppContext';
 import './DeleteConfirmationModal.css';
 
@@ -8,6 +9,7 @@ const DeleteConfirmationModal = ({ address, open, onOpenChange }) => {
 
   const handleDelete = () => {
     deleteAddress(address.id);
+    toast.success('Address deleted successfully');
     onOpenChange(false);
   };
 

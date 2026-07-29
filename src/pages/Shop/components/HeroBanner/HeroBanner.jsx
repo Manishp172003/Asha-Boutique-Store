@@ -1,13 +1,14 @@
 import { forwardRef } from "react";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./HeroBanner.css";
 
 const HeroBanner = forwardRef((props, ref) => {
   return (
     <section ref={ref} className="shop-hero">
-      <img
+      <LazyImage
         src="/src/assets/shop/shop-hero.png"
         alt="Linen Collection"
-        className="shop-hero-image"
+        loading="eager"
       />
 
       <div className="shop-hero-overlay">

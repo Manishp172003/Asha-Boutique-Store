@@ -1,7 +1,8 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useApp } from "../../context/AppContext";
 import { animateProfilePage, cleanupAnimations } from "../../animations/gsapAnimations";
+import { ProfileSkeleton } from "../../components/Skeleton";
 
 import Navigation from "../../components/layout/Navigation";
 import Footer from "../../components/layout/Footer";
@@ -14,6 +15,7 @@ import "./Profile.css";
 
 const Profile = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
   const {
     user,
     cart,
@@ -26,22 +28,6 @@ const Profile = () => {
 
   const sidebarRef = useRef(null);
   const contentRef = useRef(null);
-
-  // Redirect to login if not authenticated
-  useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    }
-  }, [user, navigate]);
-
-  // Initialize animations
-  useEffect(() => {
-    const contexts = animateProfilePage({
-      sidebarRef,
-      contentRef
-    });
-    return () => cleanupAnimations(contexts);
-  }, []);
 
   // Dummy refs (Profile page doesn't scroll to sections)
   const heroRef = useRef(null);
@@ -59,6 +45,32 @@ const Profile = () => {
   const handleMobileMenuToggle = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
+
+  // Redirect to login if not authenticated
+  useEffect(() => {
+    if (!user) {
+      navigate('/login');
+    }
+  }, [user, navigate]);
+
+  // Simulate API loading
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 600);
+    return () => clearTimeout(timer);
+  }, []);
+
+  // Initialize animations after data loads
+  useEffect(() => {
+    if (!isLoading && user) {
+      const contexts = animateProfilePage({
+        sidebarRef,
+        contentRef
+      });
+      return () => cleanupAnimations(contexts);
+    }
+  }, [isLoading, user]);
 
   const handleLogoutClick = () => {
     handleLogout();

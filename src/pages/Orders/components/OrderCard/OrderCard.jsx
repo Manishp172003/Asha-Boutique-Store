@@ -1,6 +1,7 @@
 import "./OrderCard.css";
 import StatusBadge from "../StatusBadge/StatusBadge";
 import { useNavigate } from "react-router-dom";
+import LazyImage from "../../../../components/common/LazyImage";
 
 const OrderCard = ({ order }) => {
   const navigate = useNavigate();
@@ -30,7 +31,7 @@ const OrderCard = ({ order }) => {
       <div className="order-card-left">
         <div className="order-image">
           {firstItem?.image ? (
-            <img src={firstItem.image} alt={firstItem.name} />
+            <LazyImage src={firstItem.image} alt={firstItem.name} loading="lazy" />
           ) : (
             <div className="order-image-placeholder"></div>
           )}

@@ -2,6 +2,7 @@ import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Package, Calendar, Truck } from "lucide-react";
 import StatusBadge from "../../../Orders/components/StatusBadge/StatusBadge";
+import LazyImage from "../../../../components/common/LazyImage";
 import "./RecentOrder.css";
 
 const RecentOrder = ({ order }) => {
@@ -57,7 +58,7 @@ const RecentOrder = ({ order }) => {
       <div className="recent-order-content">
         <div className="order-product">
           {latestItem?.image ? (
-            <img src={latestItem.image} alt={latestItem.name} className="product-image" />
+            <LazyImage src={latestItem.image} alt={latestItem.name} loading="lazy" />
           ) : (
             <div className="product-image-placeholder"></div>
           )}

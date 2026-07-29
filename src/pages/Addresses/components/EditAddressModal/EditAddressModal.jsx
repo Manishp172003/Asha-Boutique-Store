@@ -3,6 +3,7 @@ import { X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
+import { toast } from 'sonner';
 import { useApp } from '../../../../context/AppContext';
 import '../AddAddressModal/AddressModal.css';
 
@@ -49,21 +50,22 @@ const EditAddressModal = ({ address, open, onOpenChange }) => {
     // Validation
     if (!formData.fullName || !formData.phone || !formData.houseFlat || 
         !formData.street || !formData.city || !formData.state || !formData.pincode) {
-      alert('Please fill in all required fields');
+      toast.error('Please fill in all required fields');
       return;
     }
 
     if (formData.phone.length !== 10) {
-      alert('Please enter a valid 10-digit phone number');
+      toast.error('Please enter a valid 10-digit phone number');
       return;
     }
 
     if (formData.pincode.length !== 6) {
-      alert('Please enter a valid 6-digit pincode');
+      toast.error('Please enter a valid 6-digit pincode');
       return;
     }
 
     updateAddress(address.id, formData);
+    toast.success('Address updated successfully');
     onOpenChange(false);
   };
 
